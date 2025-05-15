@@ -1,0 +1,11 @@
+# See https://github.com/helm/chart-testing#configuration
+remote: origin
+chart-dirs:
+  - charts
+chart-repos:
+  - bitnami=https://charts.bitnami.com/bitnami  # Add any repos your charts depend on
+helm-extra-args: "--timeout 600s"
+validate-maintainers: true
+validate-chart-schema: true
+validate-yaml: true
+check-version-increment: true
