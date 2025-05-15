@@ -1,0 +1,16 @@
+# See https://github.com/helm/chart-testing#configuration
+remote: origin
+target-branch: master
+chart-dirs:
+  - charts
+chart-repos:
+  - danchev=https://danchev.github.io/helm-charts
+helm-extra-args: "--timeout 600s"
+validate-chart-schema: true
+validate-chart-values: true
+validate-maintainers: true
+validate-yaml: true
+exclude-deprecated: true
+excluded-charts: []
+additional-commands:
+  - helm unittest --strict --file 'unittests/**/*.yaml' {{ .Path }}
