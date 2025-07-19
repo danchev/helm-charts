@@ -12,12 +12,12 @@ This repository contains Helm charts for deploying various applications on Kuber
 ### Adding the Helm Repository
 
 ```bash
-helm repo add vllm https://danchev.github.io/helm-charts
+helm repo add danchev https://danchev.github.io/helm-charts
 helm repo update
 ```
 
 ### Installing the Chart
 
 ```bash
-helm install vllm vllm/chart-vllm
+helm install danchev vllm/chart-vllm
 ```
