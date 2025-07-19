@@ -23,7 +23,7 @@ $ helm install my-release utkuozdemir/nvidia-gpu-exporter
 | hostPort.enabled | bool | `false` | Enable hostPort |
 | hostPort.port | int | `9835` | The hostPort to listen to |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
-| image.repository | string | `"docker.io/utkuozdemir/nvidia_gpu_exporter"` | Image repository |
+| image.repository | string | `"ghcr.io/utkuozdemir/nvidia_gpu_exporter"` | Image repository |
 | image.tag | string | `""` | Image tag (if not specified, defaults to the chart's appVersion) |
 | imagePullSecrets | list | `[]` | Image pull secrets |
 | ingress.annotations | object | `{}` | Annotations for the Ingress |
