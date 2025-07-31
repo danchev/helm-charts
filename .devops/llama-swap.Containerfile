@@ -2,7 +2,7 @@ ARG BASE_TAG=server-cuda
 FROM ghcr.io/danchev/ik_llama.cpp:${BASE_TAG}
 
 # has to be after the FROM
-ARG LS_VER=145
+ARG LS_VER=147
 
 WORKDIR /app
 RUN \
