@@ -47,7 +47,7 @@ else
     CONTAINER_TAG="ghcr.io/danchev/llama-swap:v${LS_VER}-${ARCH}"
     CONTAINER_LATEST="ghcr.io/danchev/llama-swap:${ARCH}"
     echo "Building ${CONTAINER_TAG} $LS_VER"
-    docker build -f llama-swap.Containerfile --build-arg BASE_TAG=server-${ARCH} --build-arg LS_VER=${LS_VER} -t ${CONTAINER_TAG} -t ${CONTAINER_LATEST} .
+    docker build -f ../.devops/llama-swap.Containerfile --build-arg BASE_TAG=server-${ARCH} --build-arg LS_VER=${LS_VER} -t ${CONTAINER_TAG} -t ${CONTAINER_LATEST} .
     if [ "$PUSH_IMAGES" == "true" ]; then
       docker push ${CONTAINER_TAG}
       docker push ${CONTAINER_LATEST}
