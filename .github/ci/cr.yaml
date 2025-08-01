@@ -1,2 +1,3 @@
 owner: danchev
+generate-release-notes: true
 git-base-url: https://api.github.com/
