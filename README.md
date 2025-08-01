@@ -16,8 +16,20 @@ helm repo add danchev https://danchev.github.io/helm-charts
 helm repo update
 ```
 
-### Installing the Chart
+### Installing a Chart
+
+To install the vLLM chart:
 
 ```bash
-helm install danchev vllm/chart-vllm
+helm install vllm danchev/chart-vllm
 ```
+
+To install the NVIDIA GPU Exporter chart:
+
+```bash
+helm install nvidia-gpu-exporter danchev/nvidia-gpu-exporter
+```
+
+Replace `vllm` and `nvidia-gpu-exporter` with your desired release names.
+
+For more details, see the README in each chart directory.
