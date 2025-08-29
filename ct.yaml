@@ -1,11 +1,16 @@
 # See https://github.com/helm/chart-testing#configuration
 remote: origin
+target-branch: master
 chart-dirs:
   - charts
 chart-repos:
-  - bitnami=https://charts.bitnami.com/bitnami  # Add any repos your charts depend on
+  - danchev=https://danchev.github.io/helm-charts
 helm-extra-args: "--timeout 600s"
-validate-maintainers: true
 validate-chart-schema: true
+validate-chart-values: true
+validate-maintainers: true
 validate-yaml: true
-check-version-increment: true
+exclude-deprecated: true
+excluded-charts: []
+additional-commands:
+  - helm unittest --strict --file 'unittests/**/*.yaml' {{ .Path }}
