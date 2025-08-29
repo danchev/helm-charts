@@ -9,8 +9,8 @@ Nvidia GPU exporter for prometheus using nvidia-smi binary to gather metrics.
 ## TL;DR
 
 ```console
-$ helm repo add utkuozdemir https://utkuozdemir.org/helm-charts
-$ helm install my-release utkuozdemir/nvidia-gpu-exporter
+$ helm repo add danchev https://danchev.github.io/helm-charts
+$ helm install nvidia-gpu-exporter danchev/nvidia-gpu-exporter
 ```
 
 ## Values
@@ -59,8 +59,8 @@ $ helm install my-release utkuozdemir/nvidia-gpu-exporter
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Utku Özdemir | <utkuozdemir@gmail.com> | <https://utkuozdemir.org> |
+<!-- | Utku Özdemir | <utkuozdemir@gmail.com> | <https://utkuozdemir.org> | -->
 
 ## Source Code
 
-* <https://github.com/utkuozdemir/helm-charts>
+* <https://github.com/danchev/helm-charts>
