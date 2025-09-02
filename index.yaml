@@ -1,5 +1,36 @@
 apiVersion: v1
 entries:
+  aibrix:
+  - annotations:
+      category: AI Infra
+    apiVersion: v2
+    appVersion: 0.4.1
+    created: "2025-09-02T16:20:43.727681543Z"
+    description: Cloud-native LLM inference infrastructure with distributed inference,
+      KV caching, intelligent routing, and autoscaling capabilities
+    digest: 426d0363f09b2577ea9786fd6e580553de90aa896da207432f744744f7626547
+    home: https://github.com/vllm-project/aibrix
+    keywords:
+    - ai
+    - ai-gateway
+    - llm
+    - inference
+    - kubernetes
+    - autoscaling
+    - distributed-kv-cache
+    - lora
+    - distributed-inference
+    - disaggregation
+    maintainers:
+    - name: AIBrix Team
+      url: https://github.com/vllm-project/aibrix
+    name: aibrix
+    sources:
+    - https://github.com/vllm-project/aibrix
+    type: application
+    urls:
+    - https://github.com/danchev/helm-charts/releases/download/aibrix-0.4.1/aibrix-0.4.1.tgz
+    version: 0.4.1
   chart-vllm:
   - apiVersion: v2
     created: "2025-05-15T16:47:32.003152302-05:00"
@@ -47,4 +78,4 @@ entries:
     urls:
     - https://danchev.github.io/helm-charts/charts/nvidia-gpu-exporter-1.0.1.tgz
     version: 1.0.1
-generated: "2025-07-18T23:56:13.769111913Z"
+generated: "2025-09-02T16:20:44.109834198Z"
