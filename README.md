@@ -7,7 +7,7 @@ This repository contains Helm charts for deploying various applications on Kuber
 ## Available Charts
 
 - [aibrix](charts/chart-aibrix) - A Helm chart for deploying AIBrix, a high-performance AI inference engine.
-- [vllm](charts/chart-vllm) - A Helm chart for deploying vLLM, a high-throughput and memory-efficient inference engine for LLMs.
+- [vllm](charts/vllm) - A Helm chart for deploying vLLM, a high-throughput and memory-efficient inference engine for LLMs.
 - [nvidia-gpu-exporter](charts/nvidia-gpu-exporter) - A Helm chart for deploying the NVIDIA GPU Exporter, which exposes GPU metrics to Prometheus.
 
 ## Getting Started
@@ -24,7 +24,7 @@ helm repo update
 To install the vLLM chart:
 
 ```bash
-helm install vllm danchev/chart-vllm
+helm install vllm danchev/vllm
 ```
 
 To install the NVIDIA GPU Exporter chart:

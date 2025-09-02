@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/danchev/helm-charts/main/charts/chart-vllm/values.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/danchev/helm-charts/main/charts/vllm/values.schema.json
 # -- Default values for chart vllm
 # -- Declare variables to be passed into your templates.
 
