@@ -75,7 +75,7 @@ Ensure all required resources (e.g., ServiceAccounts) are declared in the chart 
 
 Apply required dependencies:
 ```
-kubectl apply -k config/dependency --server-side
+kubectl apply -k https://github.com/vllm-project/aibrix/config/dependency --server-side
 ```
 
 Install KubeRay operator (used by some AIBrix workloads):
