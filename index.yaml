@@ -31,17 +31,17 @@ entries:
     urls:
     - https://github.com/danchev/helm-charts/releases/download/aibrix-0.4.1/aibrix-0.4.1.tgz
     version: 0.4.1
-  chart-vllm:
+  vllm:
   - apiVersion: v2
     created: "2025-05-15T16:47:32.003152302-05:00"
     description: Chart vllm
     digest: 9a56a3e4ec8973737d01c6cea025b386f82f9c60861904ddd695e8ffee34f01e
     maintainers:
     - name: mfournioux
-    name: chart-vllm
+    name: vllm
     type: application
     urls:
-    - https://danchev.github.io/helm-charts/charts/chart-vllm-0.0.1.tgz
+    - https://danchev.github.io/helm-charts/charts/vllm-0.0.1.tgz
     version: 0.0.1
   nvidia-gpu-exporter:
   - annotations:
