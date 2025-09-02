@@ -78,4 +78,16 @@ entries:
     urls:
     - https://danchev.github.io/helm-charts/charts/nvidia-gpu-exporter-1.0.1.tgz
     version: 1.0.1
-generated: "2025-09-02T16:20:44.109834198Z"
+  vllm:
+  - apiVersion: v2
+    created: "2025-09-02T16:27:32.916800742Z"
+    description: Chart vllm
+    digest: 3f6937fedbfdfaba866541e8bf71b4ad9f53a21cc4e4a34897cdf8fa2dc5fea4
+    maintainers:
+    - name: mfournioux
+    name: vllm
+    type: application
+    urls:
+    - https://github.com/danchev/helm-charts/releases/download/vllm-0.0.1/vllm-0.0.1.tgz
+    version: 0.0.1
+generated: "2025-09-02T16:27:32.916806403Z"
