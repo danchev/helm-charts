@@ -1,0 +1,4 @@
+owner: danchev
+git-repo: helm-charts
+generate-release-notes: true
+git-base-url: https://api.github.com/
