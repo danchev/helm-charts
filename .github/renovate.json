@@ -1,0 +1,27 @@
+{
+  "extends": ["config:base"],
+  "automerge": true,
+  "automergeType": "pr",
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchDepTypes": ["devDependencies"],
+      "automerge": true,
+      "automergeType": "branch"
+    },
+    {
+      "description": "Automerge non-major updates",
+      "matchUpdateTypes": ["patch", "minor", "pin", "digest"],
+      "automerge": true
+    },
+    {
+      "matchPackageNames": ["eslint", "prettier"],
+      "automerge": true
+    }
+  ],
+  "prHourlyLimit": 5,
+  "prConcurrentLimit": 10,
+  "dependencyDashboard": true,
+  "rebaseWhen": "conflicted",
+  "platformAutomerge": true
+}
