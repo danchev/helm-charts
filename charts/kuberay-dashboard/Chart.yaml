@@ -1,0 +1,24 @@
+apiVersion: v2
+name: kuberay-dashboard
+description: A Helm chart for Ray Dashboard
+type: application
+version: 0.0.1
+appVersion: "v1.5.0"
+home: "https://github.com/ray-project/kuberay/tree/master/dashboard"
+keywords:
+  - ray
+  - dashboard
+  - kuberay
+  - kuberay-dashboard
+sources:
+  - "https://github.com/danchev/helm-charts/tree/master/charts/kuberay-dashboard"
+icon: "https://raw.githubusercontent.com/ray-project/kuberay/master/dashboard/public/ray.png"
+maintainers:
+  - name: Dobri Danchev
+    email: 12420863+danchev@users.noreply.github.com
+    url: "https://danchev.github.io/helm-charts/"
+annotations:
+  artifacthub.io/license: Apache-2.0
+  artifacthub.io/images: '[{"name":"kuberay-dashboard","image":"quay.io/kuberay/dashboard:v1.5.0"}]'
+  artifacthub.io/changes: |
+    - Initial release of kuberay-dashboard chart version 0.0.1
