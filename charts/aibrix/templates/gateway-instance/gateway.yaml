@@ -1,3 +1,4 @@
+{{- if .Values.gateway.enable }}
 apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
 metadata:
@@ -46,27 +47,14 @@ spec:
             maxUnavailable: 1
             maxSurge: 1
         pod:
+          {{- with .Values.gateway.envoyProxy.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.gateway.envoyProxy.affinity }}
           affinity:
-            podAntiAffinity:
-              preferredDuringSchedulingIgnoredDuringExecution:
-                - weight: 100
-                  podAffinityTerm:
-                    labelSelector:
-                      matchExpressions:
-                        - key: app.kubernetes.io/name
-                          operator: In
-                          values:
-                          - envoy
-                    topologyKey: "kubernetes.io/hostname"
-            nodeAffinity:
-              preferredDuringSchedulingIgnoredDuringExecution:
-                - weight: 100
-                  preference:
-                    matchExpressions:
-                      - key: nvidia.com/gpu.present
-                        operator: NotIn
-                        values:
-                          - "true"
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
         patch:
           type: StrategicMerge
           value:
@@ -74,7 +62,6 @@ spec:
               template:
                 metadata:
                   labels:
-                    {{- include "chart.selectorLabels" . | nindent 20 }}
                     app.kubernetes.io/name: envoy
                     app.kubernetes.io/component: proxy
                 spec:
@@ -126,7 +113,7 @@ spec:
         value:
           name: original_route
           match:
-            prefix: "/v1"
+            prefix: "/"
             headers:
               - name: "routing-strategy"
                 string_match:
@@ -153,3 +140,4 @@ spec:
           connect_timeout: {{ .Values.gateway.envoyPatchPolicy.route.connectTimeout }}
           lb_policy: CLUSTER_PROVIDED
           dns_lookup_family: V4_ONLY
+{{- end }}

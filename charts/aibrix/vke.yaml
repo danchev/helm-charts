@@ -7,8 +7,8 @@ controllerManager:
   imagePullSecrets: []
   container:
     image:
-      repository: aibrix-container-registry-cn-beijing.cr.volces.com/aibrix/controller-manager
-      tag: v0.4.1
+      repository: aibrix-public-release-cn-beijing.cr.volces.com/aibrix/controller-manager
+      tag: v0.5.0
       imagePullPolicy: IfNotPresent
     resources:
       limits:
@@ -31,18 +31,20 @@ controllerManager:
         initialDelaySeconds: 5
         periodSeconds: 10
   gatewayTimeoutSeconds: 120
+  tolerations: []
+  affinity: {}
 
 gatewayPlugin:
   replicaCount: 1
   imagePullSecrets: []
   initContainer:
     image:
-      repository: aibrix-container-registry-cn-beijing.cr.volces.com/aibrix/busybox
+      repository: aibrix-public-release-cn-beijing.cr.volces.com/aibrix/busybox
       tag: stable
   container:
     image:
-      repository: aibrix-container-registry-cn-beijing.cr.volces.com/aibrix/gateway-plugins
-      tag: v0.4.1
+      repository: aibrix-public-release-cn-beijing.cr.volces.com/aibrix/gateway-plugins
+      tag: v0.5.0
       imagePullPolicy: IfNotPresent
     resources:
       limits:
@@ -63,15 +65,15 @@ gatewayPlugin:
       host: aibrix-redis-master
       port: 6379
   messageTimeout: "60s"
-
+  tolerations: []
 
 gpuOptimizer:
   replicaCount: 1
   imagePullSecrets: []
   container:
     image:
-      repository: aibrix-container-registry-cn-beijing.cr.volces.com/aibrix/runtime
-      tag: v0.4.1
+      repository: aibrix-public-release-cn-beijing.cr.volces.com/aibrix/runtime
+      tag: v0.5.0
     resources:
       limits:
         cpu: 500m
@@ -83,15 +85,38 @@ gpuOptimizer:
     redis:
       host: aibrix-redis-master
       port: 6379
-
+  tolerations: []
+  affinity: {}
 
 gateway:
   envoyProxy:
     replicas: 1
     imagePullSecrets: []
+    tolerations: []
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - envoy
+              topologyKey: "kubernetes.io/hostname"
+      nodeAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            preference:
+              matchExpressions:
+                - key: nvidia.com/gpu.present
+                  operator: NotIn
+                  values:
+                    - "true"
     container:
       envoy:
-        image: aibrix-container-registry-cn-beijing.cr.volces.com/envoyproxy/envoy:v1.33.2
+        image: aibrix-public-release-cn-beijing.cr.volces.com/envoyproxy/envoy:v1.33.2
         resources:
           requests:
             cpu: "1"
@@ -100,7 +125,7 @@ gateway:
             cpu: "1"
             memory: 1Gi
       shutdownManager:
-        image: aibrix-container-registry-cn-beijing.cr.volces.com/envoyproxy/gateway:v1.2.8
+        image: aibrix-public-release-cn-beijing.cr.volces.com/envoyproxy/gateway:v1.2.8
         resources:
           requests:
             cpu: 10m
@@ -120,12 +145,12 @@ metadata:
     imagePullSecrets: []
     initContainer:
       image:
-        repository: aibrix-container-registry-cn-beijing.cr.volces.com/aibrix/busybox
+        repository: aibrix-public-release-cn-beijing.cr.volces.com/aibrix/busybox
         tag: stable
     container:
       image:
-        repository: aibrix-container-registry-cn-beijing.cr.volces.com/aibrix/metadata-service
-        tag: v0.4.1
+        repository: aibrix-public-release-cn-beijing.cr.volces.com/aibrix/metadata-service
+        tag: v0.5.0
         imagePullPolicy: IfNotPresent
       resources:
         limits:
@@ -134,6 +159,8 @@ metadata:
         requests:
           cpu: 10m
           memory: 64Mi
+    tolerations: []
+    affinity: {}
     redis:
       host: aibrix-redis-master
       port: 6379
@@ -143,7 +170,7 @@ metadata:
     imagePullSecrets: []
     container:
       image:
-        repository: aibrix-container-registry-cn-beijing.cr.volces.com/aibrix/redis
+        repository: aibrix-public-release-cn-beijing.cr.volces.com/aibrix/redis
         tag: "7.4"
       resources:
         requests:
