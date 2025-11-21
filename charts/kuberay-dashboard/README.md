@@ -1,6 +1,6 @@
 # kuberay-dashboard
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.5.0](https://img.shields.io/badge/AppVersion-v1.5.0-informational?style=flat-square)
+![Version: 0.0.2](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.5.1](https://img.shields.io/badge/AppVersion-v1.5.1-informational?style=flat-square)
 
 A Helm chart for Ray Dashboard
 
@@ -10,7 +10,7 @@ A Helm chart for Ray Dashboard
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| Dobri Danchev | <12420863+danchev@users.noreply.github.com> | <https://danchev.github.io/helm-charts/> |
+| Dobri Danchev |  | <https://danchev.github.io/helm-charts/> |
 
 ## Source Code
 
