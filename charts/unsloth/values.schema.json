@@ -1,0 +1,181 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "affinity": { "type": "object" },
+        "autoscaling": {
+            "type": "object",
+            "properties": {
+                "enabled": { "type": "boolean" },
+                "maxReplicas": { "type": "integer" },
+                "minReplicas": { "type": "integer" },
+                "targetCPUUtilizationPercentage": { "type": "integer" }
+            }
+        },
+        "config": { "type": "object" },
+        "fullnameOverride": { "type": "string" },
+        "image": {
+            "type": "object",
+            "properties": {
+                "pullPolicy": { "type": "string", "enum": ["Always", "IfNotPresent", "Never"] },
+                "repository": { "type": "string" },
+                "tag": { "type": "string" }
+            }
+        },
+        "imagePullSecrets": { "type": "array" },
+        "ingress": {
+            "type": "object",
+            "properties": {
+                "annotations": { "type": "object" },
+                "className": { "type": "string" },
+                "enabled": { "type": "boolean" },
+                "hosts": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "host": { "type": "string" },
+                            "paths": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "path": { "type": "string" },
+                                        "pathType": { "type": "string", "enum": ["Prefix", "Exact", "ImplementationSpecific"] }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tls": { "type": "array" }
+            }
+        },
+        "livenessProbe": {
+            "type": "object",
+            "properties": {
+                "failureThreshold": { "type": "integer", "minimum": 1 },
+                "periodSeconds": { "type": "integer", "minimum": 1 }
+            }
+        },
+        "nameOverride": { "type": "string" },
+        "networkPolicy": {
+            "type": "object",
+            "properties": {
+                "enabled": { "type": "boolean" },
+                "extraIngress": { "type": "array" }
+            }
+        },
+        "nodeSelector": { "type": "object" },
+        "pdb": {
+            "type": "object",
+            "properties": {
+                "enabled": { "type": "boolean" },
+                "minAvailable": { "type": "integer", "minimum": 0 }
+            }
+        },
+        "persistence": {
+            "type": "object",
+            "properties": {
+                "models": {
+                    "type": "object",
+                    "properties": {
+                        "accessMode": { "type": "string", "enum": ["ReadWriteOnce", "ReadWriteMany", "ReadOnlyMany"] },
+                        "annotations": { "type": "object" },
+                        "size": { "type": "string" },
+                        "storageClass": { "type": "string" }
+                    }
+                },
+                "notebooks": {
+                    "type": "object",
+                    "properties": {
+                        "accessMode": { "type": "string", "enum": ["ReadWriteOnce", "ReadWriteMany", "ReadOnlyMany"] },
+                        "annotations": { "type": "object" },
+                        "enabled": { "type": "boolean" },
+                        "size": { "type": "string" },
+                        "storageClass": { "type": "string" }
+                    }
+                },
+                "work": {
+                    "type": "object",
+                    "properties": {
+                        "accessMode": { "type": "string", "enum": ["ReadWriteOnce", "ReadWriteMany", "ReadOnlyMany"] },
+                        "annotations": { "type": "object" },
+                        "size": { "type": "string" },
+                        "storageClass": { "type": "string" }
+                    }
+                }
+            }
+        },
+        "podAnnotations": { "type": "object" },
+        "podLabels": { "type": "object" },
+        "podSecurityContext": { "type": "object" },
+        "ports": {
+            "type": "object",
+            "properties": {
+                "jupyterlab": { "type": "integer" },
+                "ssh": { "type": "integer" },
+                "studio": { "type": "integer" }
+            }
+        },
+        "priorityClassName": { "type": "string" },
+        "readinessProbe": {
+            "type": "object",
+            "properties": {
+                "failureThreshold": { "type": "integer", "minimum": 1 },
+                "periodSeconds": { "type": "integer", "minimum": 1 }
+            }
+        },
+        "replicaCount": { "type": "integer" },
+        "resources": { "type": "object" },
+        "runtimeClassName": { "type": "string" },
+        "secrets": {
+            "type": "object",
+            "properties": {
+                "JUPYTER_PASSWORD": { "type": "string" },
+                "SSH_KEY": { "type": "string" },
+                "USER_PASSWORD": { "type": "string" }
+            }
+        },
+        "securityContext": { "type": "object" },
+        "serviceAccount": {
+            "type": "object",
+            "properties": {
+                "annotations": { "type": "object" },
+                "automount": { "type": "boolean" },
+                "create": { "type": "boolean" },
+                "name": { "type": "string" }
+            }
+        },
+        "services": {
+            "type": "object",
+            "properties": {
+                "jupyterlab": {
+                    "type": "object",
+                    "properties": {
+                        "port": { "type": "integer" },
+                        "sessionAffinity": { "type": "string", "enum": ["None", "ClientIP"] },
+                        "type": { "type": "string", "enum": ["ClusterIP", "NodePort", "LoadBalancer"] }
+                    }
+                },
+                "studio": {
+                    "type": "object",
+                    "properties": {
+                        "port": { "type": "integer" },
+                        "sessionAffinity": { "type": "string", "enum": ["None", "ClientIP"] },
+                        "type": { "type": "string", "enum": ["ClusterIP", "NodePort", "LoadBalancer"] }
+                    }
+                }
+            }
+        },
+        "startupProbe": {
+            "type": "object",
+            "properties": {
+                "failureThreshold": { "type": "integer", "minimum": 1 },
+                "periodSeconds": { "type": "integer", "minimum": 1 }
+            }
+        },
+        "terminationGracePeriodSeconds": { "type": "integer", "minimum": 0 },
+        "tolerations": { "type": "array" }
+    }
+}

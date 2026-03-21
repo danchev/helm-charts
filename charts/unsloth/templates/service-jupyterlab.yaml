@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "unsloth.fullname" . }}-jupyterlab
+  labels:
+    {{- include "unsloth.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.services.jupyterlab.type }}
+  sessionAffinity: {{ .Values.services.jupyterlab.sessionAffinity }}
+  ports:
+    - port: {{ .Values.services.jupyterlab.port }}
+      targetPort: jupyterlab
+      protocol: TCP
+      name: jupyterlab
+  selector:
+    {{- include "unsloth.selectorLabels" . | nindent 4 }}

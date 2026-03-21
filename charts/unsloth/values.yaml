@@ -1,0 +1,231 @@
+# Default values for unsloth.
+# yaml-language-server: $schema=https://raw.githubusercontent.com/danchev/helm-charts/refs/heads/master/charts/unsloth/values.schema.json
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- Number of replicas. GPU workloads must remain at 1.
+replicaCount: 1
+
+# -- Container image configuration.
+image:
+  # -- Image repository.
+  repository: unsloth/unsloth
+  # -- Image pull policy.
+  pullPolicy: IfNotPresent
+  # -- Overrides the image tag whose default is the chart appVersion. Pin to a specific tag in production.
+  tag: ""
+
+# -- Image pull secrets for private registries.
+imagePullSecrets: []
+
+# -- Override the chart name.
+nameOverride: ""
+# -- Override the full release name.
+fullnameOverride: ""
+
+# -- Runtime class for GPU support. Set to "nvidia" for NVIDIA GPU nodes.
+runtimeClassName: nvidia
+
+# -- Priority class for GPU workload scheduling on scarce GPU nodes.
+priorityClassName: ""
+
+# -- Seconds to wait for the pod to terminate gracefully. GPU training runs need time to checkpoint.
+terminationGracePeriodSeconds: 120
+
+# -- Container port configuration.
+# Source: https://hub.docker.com/r/unsloth/unsloth
+ports:
+  # -- Unsloth Studio web interface port.
+  studio: 8000
+  # -- Jupyter Lab port.
+  jupyterlab: 8888
+  # -- SSH access port (container-side; typically host-mapped to 2222).
+  ssh: 22
+
+# -- Resource requests and limits.
+resources:
+  requests:
+    memory: 8Gi
+    cpu: 500m
+    nvidia.com/gpu: "1"
+  limits:
+    memory: 16Gi
+    cpu: 1
+    nvidia.com/gpu: "1"
+
+# -- Startup probe configuration. TCP socket on studio port.
+# 30 retries × 10s = 5 min max; increase failureThreshold for slow GPU init.
+startupProbe:
+  # -- Number of failures before giving up on startup.
+  failureThreshold: 30
+  # -- How often to probe (seconds).
+  periodSeconds: 10
+
+# -- Readiness probe configuration. TCP socket on studio port.
+readinessProbe:
+  # -- How often to probe (seconds).
+  periodSeconds: 10
+  # -- Number of consecutive failures to mark pod not-ready.
+  failureThreshold: 3
+
+# -- Liveness probe configuration. TCP socket on studio port.
+livenessProbe:
+  # -- How often to probe (seconds).
+  periodSeconds: 60
+  # -- Number of consecutive failures before restarting.
+  failureThreshold: 3
+
+# -- Persistent storage configuration.
+persistence:
+  # -- Workspace volume for training data and outputs (/workspace/work).
+  work:
+    # -- Storage size.
+    size: 5Gi
+    # -- Storage class name. Leave empty to use the cluster default.
+    storageClass: ""
+    # -- Access mode.
+    accessMode: ReadWriteOnce
+    # -- Annotations added to the PVC (e.g. Velero backup labels).
+    annotations: {}
+    # backup.velero.io/backup-volumes: "work"
+  # -- HuggingFace model cache volume (/workspace/.cache/huggingface).
+  models:
+    # -- Storage size.
+    size: 50Gi
+    # -- Storage class name. Leave empty to use the cluster default.
+    storageClass: ""
+    # -- Access mode.
+    accessMode: ReadWriteOnce
+    # -- Annotations added to the PVC.
+    annotations: {}
+  # -- Optional notebooks volume (/workspace/notebooks).
+  notebooks:
+    # -- Enable a dedicated PVC for notebooks.
+    enabled: false
+    # -- Storage size.
+    size: 10Gi
+    # -- Storage class name. Leave empty to use the cluster default.
+    storageClass: ""
+    # -- Access mode.
+    accessMode: ReadWriteOnce
+    # -- Annotations added to the PVC.
+    annotations: {}
+
+# -- Non-sensitive environment variables loaded via ConfigMap.
+config:
+  JUPYTER_PORT: "8888"
+
+# -- Sensitive environment variables loaded via Secret.
+# Leave empty to auto-generate random passwords on first install.
+# Values are preserved across helm upgrades via secret lookup.
+secrets:
+  # -- Unsloth Studio user password. Auto-generated if empty.
+  USER_PASSWORD: ""
+  # -- Jupyter authentication password. Auto-generated if empty.
+  JUPYTER_PASSWORD: ""
+  # -- Optional SSH public key for SSH access (maps to authorized_keys).
+  SSH_KEY: ""
+
+# -- Service configuration.
+services:
+  # -- Unsloth Studio web interface service (port 8000).
+  studio:
+    # -- Service type.
+    type: ClusterIP
+    # -- Service port.
+    port: 8000
+    # -- Session affinity keeps interactive UI connections on the same pod.
+    sessionAffinity: ClientIP
+  # -- Jupyter Lab service (port 8888).
+  jupyterlab:
+    # -- Service type.
+    type: ClusterIP
+    # -- Service port.
+    port: 8888
+    # -- Session affinity for Jupyter Lab connections.
+    sessionAffinity: ClientIP
+
+# -- Service account configuration.
+serviceAccount:
+  # -- Specifies whether a service account should be created.
+  create: true
+  # -- Mount the SA token into the pod. Disable unless the container needs k8s API access.
+  automount: false
+  # -- Annotations to add to the service account.
+  annotations: {}
+  # -- The name of the service account to use. If not set and create is true, a name is generated.
+  name: ""
+
+# -- Annotations to add to the pod.
+podAnnotations: {}
+# -- Labels to add to the pod.
+podLabels: {}
+
+# -- Pod-level security context.
+podSecurityContext: {}
+  # fsGroup: 2000
+
+# -- Container-level security context.
+# The container runs as a non-root user (confirmed by upstream image).
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # runAsNonRoot: true
+
+# -- Ingress configuration for Unsloth Studio.
+ingress:
+  # -- Enable ingress.
+  enabled: false
+  # -- Ingress class name.
+  className: ""
+  # -- Ingress annotations.
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: unsloth.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+  #  - secretName: unsloth-tls
+  #    hosts:
+  #      - unsloth.local
+
+# -- Pod Disruption Budget — prevents eviction of the GPU pod during cluster maintenance.
+pdb:
+  # -- Enable PodDisruptionBudget.
+  enabled: true
+  # -- Minimum available pods at all times.
+  minAvailable: 1
+
+# -- Network Policy — restricts ingress to the pod.
+networkPolicy:
+  # -- Enable NetworkPolicy.
+  enabled: false
+  # -- Additional ingress rules beyond the default (allow ingress-controller + same-namespace).
+  extraIngress: []
+  # - from:
+  #   - namespaceSelector:
+  #       matchLabels:
+  #         kubernetes.io/metadata.name: monitoring
+  #   ports:
+  #   - port: 8000
+
+# -- Autoscaling configuration. Not recommended for GPU workloads.
+autoscaling:
+  # -- Enable horizontal pod autoscaler.
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 80
+
+# -- Node selector for pod scheduling.
+nodeSelector: {}
+
+# -- Tolerations for pod scheduling.
+tolerations: []
+
+# -- Affinity rules for pod scheduling.
+affinity: {}
