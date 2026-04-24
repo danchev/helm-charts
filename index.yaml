@@ -64,11 +64,11 @@ entries:
     version: 0.4.1
   kuberay-dashboard:
   - annotations:
-      category: AI Infra
       artifacthub.io/changes: |
         - Update appVersion to v1.5.1
       artifacthub.io/images: '[{"name":"kuberay-dashboard","image":"quay.io/kuberay/dashboard:v1.5.1"}]'
       artifacthub.io/license: Apache-2.0
+      category: AI Infra
     apiVersion: v2
     appVersion: v1.5.1
     created: "2025-11-21T23:11:44.597280847Z"
@@ -188,6 +188,39 @@ entries:
     urls:
     - https://danchev.github.io/helm-charts/charts/nvidia-gpu-exporter-1.0.1.tgz
     version: 1.0.1
+  unsloth:
+  - annotations:
+      artifacthub.io/changes: |
+        - Initial release of Unsloth Helm chart
+      artifacthub.io/images: '[{"name":"unsloth","image":"unsloth/unsloth:latest"}]'
+      artifacthub.io/license: Apache-2.0
+      category: AI Infra
+    apiVersion: v2
+    appVersion: latest
+    created: "2026-04-24T14:39:07.75338019Z"
+    description: A Helm chart for Unsloth Studio — GPU-accelerated LLM fine-tuning
+      and inference platform
+    digest: e8f8e54f6502922e0a825d3a2ef997966cdb25e564b47d5ae0206dc12bec491f
+    home: https://unsloth.ai
+    icon: https://raw.githubusercontent.com/unslothai/unsloth/main/images/unsloth%20logo%20white%20text.png
+    keywords:
+    - unsloth
+    - llm
+    - fine-tuning
+    - gpu
+    - jupyter
+    - ai
+    maintainers:
+    - email: 12420863+danchev@users.noreply.github.com
+      name: Dobri Danchev
+      url: https://danchev.github.io/helm-charts/
+    name: unsloth
+    sources:
+    - https://github.com/danchev/helm-charts/tree/master/charts/unsloth
+    type: application
+    urls:
+    - https://github.com/danchev/helm-charts/releases/download/unsloth-0.0.1/unsloth-0.0.1.tgz
+    version: 0.0.1
   vllm:
   - apiVersion: v2
     created: "2025-09-02T16:27:32.916800742Z"
@@ -200,4 +233,4 @@ entries:
     urls:
     - https://github.com/danchev/helm-charts/releases/download/vllm-0.0.1/vllm-0.0.1.tgz
     version: 0.0.1
-generated: "2025-11-21T23:11:44.597291747Z"
+generated: "2026-04-24T14:39:07.753402443Z"
