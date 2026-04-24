@@ -65,6 +65,35 @@ entries:
   kuberay-dashboard:
   - annotations:
       artifacthub.io/changes: |
+        - Update appVersion to v1.6.1
+      artifacthub.io/images: '[{"name":"kuberay-dashboard","image":"quay.io/kuberay/dashboard:v1.6.1"}]'
+      artifacthub.io/license: Apache-2.0
+      category: AI Infra
+    apiVersion: v2
+    appVersion: v1.6.1
+    created: "2026-04-24T14:48:30.511815727Z"
+    description: A Helm chart for Ray Dashboard
+    digest: 9017af1147410c20ad3f3842a4460741b240ca51c1dfee17a05394c583558c96
+    home: https://github.com/ray-project/kuberay/tree/master/dashboard
+    icon: https://raw.githubusercontent.com/ray-project/kuberay/master/dashboard/public/ray.png
+    keywords:
+    - ray
+    - dashboard
+    - kuberay
+    - kuberay-dashboard
+    maintainers:
+    - email: 12420863+danchev@users.noreply.github.com
+      name: Dobri Danchev
+      url: https://danchev.github.io/helm-charts/
+    name: kuberay-dashboard
+    sources:
+    - https://github.com/danchev/helm-charts/tree/master/charts/kuberay-dashboard
+    type: application
+    urls:
+    - https://github.com/danchev/helm-charts/releases/download/kuberay-dashboard-0.0.3/kuberay-dashboard-0.0.3.tgz
+    version: 0.0.3
+  - annotations:
+      artifacthub.io/changes: |
         - Update appVersion to v1.5.1
       artifacthub.io/images: '[{"name":"kuberay-dashboard","image":"quay.io/kuberay/dashboard:v1.5.1"}]'
       artifacthub.io/license: Apache-2.0
@@ -233,4 +262,4 @@ entries:
     urls:
     - https://github.com/danchev/helm-charts/releases/download/vllm-0.0.1/vllm-0.0.1.tgz
     version: 0.0.1
-generated: "2026-04-24T14:39:07.753402443Z"
+generated: "2026-04-24T14:48:30.697695367Z"
