@@ -2,8 +2,8 @@ apiVersion: v2
 name: kuberay-dashboard
 description: A Helm chart for Ray Dashboard
 type: application
-version: 0.0.3
-appVersion: "v1.6.1"
+version: 0.0.4
+appVersion: "v1.6.2"
 home: "https://github.com/ray-project/kuberay/tree/master/dashboard"
 keywords:
   - ray
@@ -20,6 +20,6 @@ maintainers:
 annotations:
   category: AI Infra
   artifacthub.io/license: Apache-2.0
-  artifacthub.io/images: '[{"name":"kuberay-dashboard","image":"quay.io/kuberay/dashboard:v1.6.1"}]'
+  artifacthub.io/images: '[{"name":"kuberay-dashboard","image":"quay.io/kuberay/dashboard:v1.6.2"}]'
   artifacthub.io/changes: |
-    - Update appVersion to v1.6.1
+    - Update appVersion to v1.6.2
