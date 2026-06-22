@@ -4,6 +4,37 @@ entries:
   - annotations:
       category: AI Infra
     apiVersion: v2
+    appVersion: 0.7.0
+    created: "2026-06-22T02:19:48.673930114Z"
+    description: Cloud-native LLM inference infrastructure with distributed inference,
+      KV caching, intelligent routing, and autoscaling capabilities
+    digest: d7aba0c997cb06bf7afcd967cede26d822c9f6fbd02ab9b6ccd37ab53887ec3e
+    home: https://github.com/vllm-project/aibrix
+    icon: https://github.com/vllm-project/aibrix/blob/main/docs/source/assets/logos/aibrix-logo.jpeg?raw=true
+    keywords:
+    - ai
+    - ai-gateway
+    - llm
+    - inference
+    - kubernetes
+    - autoscaling
+    - distributed-kv-cache
+    - lora
+    - distributed-inference
+    - disaggregation
+    maintainers:
+    - name: AIBrix Team
+      url: https://github.com/vllm-project/aibrix
+    name: aibrix
+    sources:
+    - https://github.com/vllm-project/aibrix
+    type: application
+    urls:
+    - https://github.com/danchev/helm-charts/releases/download/aibrix-0.7.0/aibrix-0.7.0.tgz
+    version: 0.7.0
+  - annotations:
+      category: AI Infra
+    apiVersion: v2
     appVersion: 0.5.0
     created: "2025-11-21T19:54:48.531090609Z"
     description: Cloud-native LLM inference infrastructure with distributed inference,
@@ -322,4 +353,4 @@ entries:
     urls:
     - https://github.com/danchev/helm-charts/releases/download/vllm-0.0.1/vllm-0.0.1.tgz
     version: 0.0.1
-generated: "2026-06-22T00:56:04.952344919Z"
+generated: "2026-06-22T02:19:48.673959009Z"
