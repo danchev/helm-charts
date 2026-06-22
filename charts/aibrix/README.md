@@ -71,7 +71,7 @@ helm uninstall aibrix -n aibrix-system
 | controllerManager.container.envs | object | `{}` |  |
 | controllerManager.container.image.imagePullPolicy | string | `"IfNotPresent"` |  |
 | controllerManager.container.image.repository | string | `"aibrix/controller-manager"` |  |
-| controllerManager.container.image.tag | string | `"nightly"` |  |
+| controllerManager.container.image.tag | string | `"v0.7.0"` |  |
 | controllerManager.container.probes.liveness.httpGet.path | string | `"/healthz"` |  |
 | controllerManager.container.probes.liveness.httpGet.port | int | `8081` |  |
 | controllerManager.container.probes.liveness.initialDelaySeconds | int | `15` |  |
@@ -143,7 +143,7 @@ helm uninstall aibrix -n aibrix-system
 | gatewayPlugin.container.envs.AIBRIX_STATESYNC_ENABLED | string | `"false"` |  |
 | gatewayPlugin.container.image.imagePullPolicy | string | `"IfNotPresent"` |  |
 | gatewayPlugin.container.image.repository | string | `"aibrix/gateway-plugins"` |  |
-| gatewayPlugin.container.image.tag | string | `"nightly"` |  |
+| gatewayPlugin.container.image.tag | string | `"v0.7.0"` |  |
 | gatewayPlugin.container.probes.liveness.failureThreshold | int | `3` |  |
 | gatewayPlugin.container.probes.liveness.grpc.port | int | `50052` |  |
 | gatewayPlugin.container.probes.liveness.initialDelaySeconds | int | `5` |  |
@@ -180,7 +180,7 @@ helm uninstall aibrix -n aibrix-system
 | global.imagePullSecrets | list | `[]` |  |
 | gpuOptimizer.affinity | object | `{}` |  |
 | gpuOptimizer.container.image.repository | string | `"aibrix/metadata-service"` |  |
-| gpuOptimizer.container.image.tag | string | `"nightly"` |  |
+| gpuOptimizer.container.image.tag | string | `"v0.7.0"` |  |
 | gpuOptimizer.container.resources.limits.cpu | string | `"500m"` |  |
 | gpuOptimizer.container.resources.limits.memory | string | `"256Mi"` |  |
 | gpuOptimizer.container.resources.requests.cpu | string | `"10m"` |  |
@@ -206,7 +206,7 @@ helm uninstall aibrix -n aibrix-system
 | metadata.service.affinity | object | `{}` |  |
 | metadata.service.container.image.imagePullPolicy | string | `"IfNotPresent"` |  |
 | metadata.service.container.image.repository | string | `"aibrix/metadata-service"` |  |
-| metadata.service.container.image.tag | string | `"nightly"` |  |
+| metadata.service.container.image.tag | string | `"v0.7.0"` |  |
 | metadata.service.container.resources.limits.cpu | string | `"500m"` |  |
 | metadata.service.container.resources.limits.memory | string | `"512Mi"` |  |
 | metadata.service.container.resources.requests.cpu | string | `"50m"` |  |
