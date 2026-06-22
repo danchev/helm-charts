@@ -3,25 +3,25 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/component: aibrix-controller-manager
-    {{- include "chart.labels" . | nindent 4 }}
-  name: aibrix-controller-manager
-  namespace: {{ .Release.Namespace }}
+    {{- include "aibrix.labels" . | nindent 4 }}
+  name: {{ include "aibrix.fullname" . }}-controller-manager
 spec:
   replicas: {{ .Values.controllerManager.replicas }}
   selector:
     matchLabels:
-      {{- include "chart.selectorLabels" . | nindent 6 }}
+      {{- include "aibrix.selectorLabels" . | nindent 6 }}
       app.kubernetes.io/component: aibrix-controller-manager
   template:
     metadata:
       labels:
-        {{- include "chart.labels" . | nindent 8 }}
+        {{- include "aibrix.labels" . | nindent 8 }}
         app.kubernetes.io/component: aibrix-controller-manager
     spec:
-      {{- include "chart.imagePullSecrets" (dict "componentSecrets" .Values.controllerManager.imagePullSecrets "globalSecrets" .Values.global.imagePullSecrets) | nindent 6 }}
+      {{- include "aibrix.imagePullSecrets" (dict "componentSecrets" .Values.controllerManager.imagePullSecrets "globalSecrets" .Values.global.imagePullSecrets) | nindent 6 }}
       containers:
       - args:
         - --leader-elect
+        - --leader-election-namespace={{ .Release.Namespace }}
         - --health-probe-bind-address=:8081
         - --metrics-bind-address=:8080
         - --enable-runtime-sidecar
@@ -30,6 +30,11 @@ spec:
         env:
         - name: AIBRIX_GATEWAY_TIMEOUT_SECONDS
           value: "{{ .Values.controllerManager.gatewayTimeoutSeconds }}"
+{{- $envs := .Values.controllerManager.container.envs }}
+{{- range $key := keys $envs | sortAlpha }}
+        - name: {{ $key }}
+          value: {{ index $envs $key | quote }}
+{{- end }}
         image: {{ .Values.controllerManager.container.image.repository }}:{{ .Values.controllerManager.container.image.tag }}
         imagePullPolicy: {{ .Values.controllerManager.container.image.imagePullPolicy }}
         name: manager
@@ -53,7 +58,7 @@ spec:
           readOnly: true
       securityContext:
         runAsNonRoot: true
-      serviceAccountName: aibrix-controller-manager
+      serviceAccountName: {{ include "aibrix.controllerManager.serviceAccountName" . }}
       terminationGracePeriodSeconds: 10
       volumes:
       - name: cert
