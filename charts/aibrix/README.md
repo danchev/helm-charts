@@ -21,7 +21,7 @@ Cloud-native LLM inference infrastructure with distributed inference, KV caching
 ### Dependencies
 Apply required dependencies:
 ```
-kubectl apply --server-side -k https://github.com/vllm-project/aibrix/config/dependency
+kubectl apply --server-side -k https://github.com/vllm-project/aibrix/config/dependency?ref=v0.7.0
 ```
 
 ### Helm Install
