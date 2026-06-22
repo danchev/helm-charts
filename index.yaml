@@ -8,7 +8,7 @@ entries:
     created: "2026-06-22T02:19:48.673930114Z"
     description: Cloud-native LLM inference infrastructure with distributed inference,
       KV caching, intelligent routing, and autoscaling capabilities
-    digest: d7aba0c997cb06bf7afcd967cede26d822c9f6fbd02ab9b6ccd37ab53887ec3e
+    digest: e96df8524fdeda696cc82a423272514986cb6fc48f659475fb62c3c7120b7314
     home: https://github.com/vllm-project/aibrix
     icon: https://github.com/vllm-project/aibrix/blob/main/docs/source/assets/logos/aibrix-logo.jpeg?raw=true
     keywords:
