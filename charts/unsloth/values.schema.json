@@ -134,7 +134,7 @@
             "properties": {
                 "JUPYTER_PASSWORD": { "type": "string" },
                 "SSH_KEY": { "type": "string" },
-                "USER_PASSWORD": { "type": "string" }
+                "UNSLOTH_STUDIO_PASSWORD": { "type": "string" }
             }
         },
         "securityContext": { "type": "object" },

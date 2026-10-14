@@ -11,8 +11,8 @@ image:
   # -- Image repository.
   repository: unsloth/unsloth
   # -- Image pull policy.
-  pullPolicy: IfNotPresent
-  # -- Overrides the image tag whose default is the chart appVersion. Pin to a specific tag in production.
+  pullPolicy: Always
+  # -- Overrides the image tag whose default is the chart appVersion (latest).
   tag: ""
 
 # -- Image pull secrets for private registries.
@@ -120,7 +120,7 @@ config:
 # Values are preserved across helm upgrades via secret lookup.
 secrets:
   # -- Unsloth Studio user password. Auto-generated if empty.
-  USER_PASSWORD: ""
+  UNSLOTH_STUDIO_PASSWORD: ""
   # -- Jupyter authentication password. Auto-generated if empty.
   JUPYTER_PASSWORD: ""
   # -- Optional SSH public key for SSH access (maps to authorized_keys).

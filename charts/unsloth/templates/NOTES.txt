@@ -4,7 +4,7 @@ Unsloth has been deployed successfully!
 Passwords were auto-generated on first install if not explicitly set.
 Retrieve them with:
   kubectl get secret --namespace {{ .Release.Namespace }} {{ include "unsloth.fullname" . }} -o jsonpath="{.data.JUPYTER_PASSWORD}" | base64 -d && echo
-  kubectl get secret --namespace {{ .Release.Namespace }} {{ include "unsloth.fullname" . }} -o jsonpath="{.data.USER_PASSWORD}" | base64 -d && echo
+  kubectl get secret --namespace {{ .Release.Namespace }} {{ include "unsloth.fullname" . }} -o jsonpath="{.data.UNSLOTH_STUDIO_PASSWORD}" | base64 -d && echo
 
 NOTE: First launch may take 5-10 minutes while llama.cpp compiles.
 
