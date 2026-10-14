@@ -31,6 +31,8 @@ podSecurityContext: {}
 # -- Security context for the container. Privileged is required for the collector to work properly.
 securityContext:
   privileged: true
+  # Preserve the UID 0 used by previous images for the existing host-device mounts.
+  runAsUser: 0
   # capabilities:
   #   drop:
   #   - ALL

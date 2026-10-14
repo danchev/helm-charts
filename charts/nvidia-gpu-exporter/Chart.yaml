@@ -2,8 +2,8 @@ apiVersion: v2
 name: nvidia-gpu-exporter
 description: Nvidia GPU exporter for prometheus using nvidia-smi binary to gather metrics.
 type: application
-version: 1.0.3
-appVersion: 1.5.0
+version: 1.1.0
+appVersion: 1.15.1
 home: https://github.com/utkuozdemir/nvidia_gpu_exporter
 keywords:
   - nvidia
@@ -13,14 +13,17 @@ keywords:
   - nvidia-gpu-exporter
   - prometheus
 sources:
+  - https://github.com/danchev/helm-charts/tree/master/charts/nvidia-gpu-exporter
+  - https://github.com/utkuozdemir/nvidia_gpu_exporter
   - https://github.com/utkuozdemir/helm-charts
 icon: https://utkuozdemir.org/helm-charts/nvidia.png
 maintainers:
-  - name: Utku Özdemir
-    email: utkuozdemir@gmail.com
-    url: https://utkuozdemir.org
+  - name: Dobri Danchev
+    email: 12420863+danchev@users.noreply.github.com
+    url: https://danchev.github.io/helm-charts/
 annotations:
   artifacthub.io/license: MIT
   artifacthub.io/changes: |
-    - Bump appVersion to 1.5.0
-  artifacthub.io/images: '[{"name":"nvidia_gpu_exporter","image":"ghcr.io/utkuozdemir/nvidia_gpu_exporter:1.5.0"}]'
+    - Update NVIDIA GPU Exporter to 1.15.1
+    - Preserve UID 0 for the chart's existing privileged host-device mounts
+  artifacthub.io/images: '[{"name":"nvidia_gpu_exporter","image":"ghcr.io/utkuozdemir/nvidia_gpu_exporter:1.15.1"}]'

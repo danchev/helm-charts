@@ -1,6 +1,6 @@
 # nvidia-gpu-exporter
 
-![Version: 1.0.3](https://img.shields.io/badge/Version-1.0.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.5.0](https://img.shields.io/badge/AppVersion-1.5.0-informational?style=flat-square)
+![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.15.1](https://img.shields.io/badge/AppVersion-1.15.1-informational?style=flat-square)
 
 Nvidia GPU exporter for prometheus using nvidia-smi binary to gather metrics.
 
@@ -10,8 +10,17 @@ Nvidia GPU exporter for prometheus using nvidia-smi binary to gather metrics.
 
 ```console
 $ helm repo add danchev https://danchev.github.io/helm-charts
-$ helm install nvidia-gpu-exporter danchev/nvidia-gpu-exporter
+$ helm install my-release danchev/nvidia-gpu-exporter
 ```
+
+## Upgrading the image
+
+Chart 1.1.0 runs NVIDIA GPU Exporter 1.15.1. Its container image is now
+shell-less and defaults to UID 65534. This chart explicitly uses UID 0 for its
+existing privileged host-device and driver mounts. Review custom security
+contexts and host driver paths before upgrading GPU nodes. Metrics with
+millisecond units now use seconds; review affected Prometheus queries against
+the [upstream release notes](https://github.com/utkuozdemir/nvidia_gpu_exporter/releases).
 
 ## Values
 
@@ -41,7 +50,7 @@ $ helm install nvidia-gpu-exporter danchev/nvidia-gpu-exporter
 | port | int | `9835` | Port for the exporter to listen to |
 | queryFieldNames | list | `["AUTO"]` | `nvidia-smi` fields to be queried by the exporter |
 | resources | object | `{}` | The resource requests and limits of the container |
-| securityContext | object | `{"privileged":true}` | Security context for the container. Privileged is required for the collector to work properly. |
+| securityContext | object | `{"privileged":true,"runAsUser":0}` | Security context for the container. Privileged is required for the collector to work properly. |
 | service.enabled | bool | `true` | Enables the Service |
 | service.nodePort | string | `nil` | The node port to use if service type is NodePort or LoadBalancer. |
 | service.port | int | `9835` | Port for the service to use |
@@ -59,8 +68,15 @@ $ helm install nvidia-gpu-exporter danchev/nvidia-gpu-exporter
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-<!-- | Utku Özdemir | <utkuozdemir@gmail.com> | <https://utkuozdemir.org> | -->
+| Dobri Danchev | <12420863+danchev@users.noreply.github.com> | <https://danchev.github.io/helm-charts/> |
 
 ## Source Code
 
-* <https://github.com/danchev/helm-charts>
+* <https://github.com/danchev/helm-charts/tree/master/charts/nvidia-gpu-exporter>
+* <https://github.com/utkuozdemir/nvidia_gpu_exporter>
+* <https://github.com/utkuozdemir/helm-charts>
+
+## Attribution
+
+This chart is derived from [Utku Özdemir's Helm charts](https://github.com/utkuozdemir/helm-charts).
+The [NVIDIA GPU Exporter](https://github.com/utkuozdemir/nvidia_gpu_exporter) is an upstream project by Utku Özdemir.
