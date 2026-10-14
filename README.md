@@ -6,9 +6,9 @@ This repository contains Helm charts for deploying various applications on Kuber
 
 ## Available Charts
 
-- [aibrix](charts/aibrix) - A Helm chart for deploying AIBrix, a high-performance AI inference engine.
+- [aibrix](charts/aibrix) - A Helm chart for deploying AIBrix, cloud-native LLM inference infrastructure.
 - [nvidia-gpu-exporter](charts/nvidia-gpu-exporter) - A Helm chart for deploying the NVIDIA GPU Exporter, which exposes GPU metrics to Prometheus.
-- [kuberay-dashboard](charts/kuberay-dashboard) - A Helm chart for deploying the Ray Dashboard, a web UI for monitoring and managing Ray clusters.
+- [kuberay-dashboard](charts/kuberay-dashboard) - A Helm chart for deploying the KubeRay Dashboard, a web UI for managing Ray clusters.
 - [vllm](charts/vllm) - A Helm chart for deploying vLLM, a high-throughput and memory-efficient inference engine for LLMs.
 - [unsloth](charts/unsloth) - GPU-accelerated LLM fine-tuning and inference with Unsloth Studio and Jupyter Lab.
 
@@ -18,15 +18,15 @@ This repository contains Helm charts for deploying various applications on Kuber
 
 ```bash
 helm repo add danchev https://danchev.github.io/helm-charts
-helm repo update
+helm repo update danchev
 ```
 
 ### Installing a Chart
 
-To install the AIBrix chart:
+For AIBrix, first install the [matching external dependencies](charts/aibrix/README.md#dependencies), then install the chart:
 
 ```bash
-helm install aibrix danchev/aibrix -n aibrix-system --create-namespace
+helm install aibrix danchev/aibrix --version 0.8.0 -n aibrix-system --create-namespace
 ```
 
 To install the NVIDIA GPU Exporter chart:
@@ -35,12 +35,13 @@ To install the NVIDIA GPU Exporter chart:
 helm install nvidia-gpu-exporter danchev/nvidia-gpu-exporter
 ```
 
-To install the Ray Dashboard chart:
+To install the KubeRay Dashboard chart:
 
 ```bash
 helm install kuberay-dashboard danchev/kuberay-dashboard
 ```
 
-Replace `vllm`, `nvidia-gpu-exporter`, `kuberay-dashboard` with your desired release names.
+Published chart archives are also available through OCI at
+`oci://ghcr.io/danchev/charts/<chart-name>`.
 
 For more details, see the README in each chart directory.

@@ -2,7 +2,7 @@
 
 ![Version: 0.0.6](https://img.shields.io/badge/Version-0.0.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: v1.7.1](https://img.shields.io/badge/AppVersion-v1.7.1-informational?style=flat-square)
 
-A Helm chart for Ray Dashboard
+A Helm chart for KubeRay Dashboard
 
 **Homepage:** <https://github.com/ray-project/kuberay/tree/master/dashboard>
 
@@ -15,6 +15,17 @@ A Helm chart for Ray Dashboard
 ## Source Code
 
 * <https://github.com/danchev/helm-charts/tree/master/charts/kuberay-dashboard>
+
+## Installation
+
+Provide a reachable KubeRay API server through `apiServer.url`; this chart deploys
+the dashboard, not the API server.
+
+```bash
+helm repo add danchev https://danchev.github.io/helm-charts
+helm repo update danchev
+helm install kuberay-dashboard danchev/kuberay-dashboard --version 0.0.6 -f my-values.yaml
+```
 
 ## Values
 

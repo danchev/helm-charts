@@ -4,12 +4,20 @@
 
 Chart vllm
 
+## Installation
+
+Configure GPU scheduling, model storage, and serving arguments in your values file.
+
+```bash
+helm repo add danchev https://danchev.github.io/helm-charts
+helm repo update danchev
+helm install vllm danchev/vllm --version 0.1.0 -f my-values.yaml
+```
+
 ## Upgrading from 0.0.1
 
-Chart 0.1.0 uses selectors tied to the Helm release for the Deployment, Service,
-and PodDisruptionBudget. Custom `labels` are applied to pods without changing
-these selectors. The HPA targets the release's Deployment and controls its
-replica count when enabled.
+Chart 0.1.0 scopes Deployment, Service, and PodDisruptionBudget selectors to the
+Helm release.
 
 Deployment selectors are immutable. Recreate the existing Deployment before
 upgrading; this causes downtime but preserves the PVC. Replace the release name
