@@ -416,14 +416,14 @@ entries:
         - Release 1.0.1 of the chart
       artifacthub.io/images: |
         - name: utkuozdemir/nvidia_gpu_exporter
-          image:ghcr.io/utkuozdemir/nvidia_gpu_exporter:1.3.2
+          image: ghcr.io/utkuozdemir/nvidia_gpu_exporter:1.3.2
       artifacthub.io/license: MIT
     apiVersion: v2
     appVersion: 1.3.2
     created: "2026-10-14T16:20:35.570401256-05:00"
     description: Nvidia GPU exporter for prometheus using nvidia-smi binary to gather
       metrics.
-    digest: 0a69a99514bf25bf820d3f53e2bf3c572bdacbac66d554ab2d320c955d379907
+    digest: 915b1c68ef1d879448431c608a6b5a1e022b6888bb8fc2cc577ffa23b42418c5
     home: https://github.com/utkuozdemir/nvidia_gpu_exporter
     icon: https://utkuozdemir.org/helm-charts/nvidia.png
     keywords:
