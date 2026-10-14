@@ -340,6 +340,39 @@ entries:
   unsloth:
   - annotations:
       artifacthub.io/changes: |
+        - Use the latest Studio image by default
+        - Migrate Studio password configuration and correct installation documentation
+      artifacthub.io/images: '[{"name":"unsloth","image":"unsloth/unsloth:latest"}]'
+      artifacthub.io/license: Apache-2.0
+      category: AI Infra
+    apiVersion: v2
+    appVersion: latest
+    created: "2026-10-14T20:41:27.537792833Z"
+    description: A Helm chart for Unsloth Studio — GPU-accelerated LLM fine-tuning
+      and inference platform
+    digest: 580ca4f1ef976cdaa07edeceb4d551d6463e4b998a413950d3024f5c75f9bce2
+    home: https://unsloth.ai
+    icon: https://raw.githubusercontent.com/unslothai/unsloth/main/images/unsloth%20logo%20white%20text.png
+    keywords:
+    - unsloth
+    - llm
+    - fine-tuning
+    - gpu
+    - jupyter
+    - ai
+    maintainers:
+    - email: 12420863+danchev@users.noreply.github.com
+      name: Dobri Danchev
+      url: https://danchev.github.io/helm-charts/
+    name: unsloth
+    sources:
+    - https://github.com/danchev/helm-charts/tree/master/charts/unsloth
+    type: application
+    urls:
+    - https://github.com/danchev/helm-charts/releases/download/unsloth-0.0.2/unsloth-0.0.2.tgz
+    version: 0.0.2
+  - annotations:
+      artifacthub.io/changes: |
         - Initial release of Unsloth Helm chart
       artifacthub.io/images: '[{"name":"unsloth","image":"unsloth/unsloth:latest"}]'
       artifacthub.io/license: Apache-2.0
@@ -382,4 +415,4 @@ entries:
     urls:
     - https://github.com/danchev/helm-charts/releases/download/vllm-0.0.1/vllm-0.0.1.tgz
     version: 0.0.1
-generated: "2026-09-09T10:59:15.803777601Z"
+generated: "2026-10-14T20:41:27.537818601Z"
