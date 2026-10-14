@@ -16,7 +16,7 @@ image:
 
 # This is the API server URL for the Ray Dashboard to connect to
 apiServer:
-    url: "http://kuberay-apiserver-service.default.svc.cluster.local:8888/apis/ray.io/v1"
+  url: "http://kuberay-apiserver-service.default.svc.cluster.local:8888/apis/ray.io/v1"
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
