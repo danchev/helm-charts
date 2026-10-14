@@ -16,11 +16,50 @@ Cloud-native LLM inference infrastructure with distributed inference, KV caching
 
 * <https://github.com/vllm-project/aibrix>
 
-### Dependencies
+## Installation
 
+### Dependencies
 Apply required dependencies:
 ```
 kubectl apply --server-side -k https://github.com/vllm-project/aibrix/config/dependency?ref=v0.7.0
+```
+
+### Helm Install
+
+Install AIBrix with the default values:
+```
+helm repo add aibrix https://danchev.github.io/helm-charts
+helm install aibrix aibrix/aibrix -n aibrix-system --create-namespace
+```
+
+Or use a custom values file:
+
+```
+helm install aibrix aibrix/aibrix -f my-values.yaml -n aibrix-system --create-namespace
+```
+
+
+### Verification
+
+```
+helm list -A
+kubectl get all -n aibrix-system
+```
+
+
+### Helm upgrade
+
+Upgrade to the latest chart version:
+```
+helm upgrade aibrix aibrix/aibrix -n aibrix-system
+```
+
+
+### Helm Uninstall
+
+Remove the release:
+```
+helm uninstall aibrix -n aibrix-system
 ```
 
 ## Values

@@ -1,8 +1,31 @@
 # vllm
 
-![Version: 0.0.1](https://img.shields.io/badge/Version-0.0.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 Chart vllm
+
+## Upgrading from 0.0.1
+
+Chart 0.1.0 uses selectors tied to the Helm release for the Deployment, Service,
+and PodDisruptionBudget. Custom `labels` are applied to pods without changing
+these selectors. The HPA targets the release's Deployment and controls its
+replica count when enabled.
+
+Deployment selectors are immutable. Recreate the existing Deployment before
+upgrading; this causes downtime but preserves the PVC. Replace the release name
+and namespace in these commands with your installation's values:
+
+```bash
+kubectl delete deployment my-release-deployment-vllm -n my-namespace
+helm upgrade my-release danchev/vllm --version 0.1.0 -n my-namespace -f my-values.yaml
+```
+
+## Image version
+
+The default image is pinned to `vllm/vllm-openai:v0.31.0` (CUDA 13.0).
+GPU nodes must have compatible NVIDIA drivers. For the CUDA 12.9 build, set
+`image.tag: v0.31.0-cu129`. Review the [upstream release notes](https://github.com/vllm-project/vllm/releases/tag/v0.31.0)
+before changing custom serving arguments or upgrading deployed workloads.
 
 ## Values
 
@@ -24,10 +47,10 @@ Chart vllm
 | extraInit.s3modelpath | string | `"relative_s3_model_path/opt-125m"` | Path of the model on the s3 which hosts model weights and config files |
 | extraPorts | list | `[]` | Additional ports configuration |
 | gpuModels | list | `["TYPE_GPU_USED"]` | Type of gpu used |
-| image | object | `{"command":["vllm","serve","/data/","--served-model-name","opt-125m","--dtype","float32","--block-size","16","--host","0.0.0.0","--port","8000"],"repository":"vllm/vllm-openai","tag":"latest"}` | Image configuration |
+| image | object | `{"command":["vllm","serve","/data/","--served-model-name","opt-125m","--dtype","float32","--block-size","16","--host","0.0.0.0","--port","8000"],"repository":"vllm/vllm-openai","tag":"v0.31.0"}` | Image configuration |
 | image.command | list | `["vllm","serve","/data/","--served-model-name","opt-125m","--dtype","float32","--block-size","16","--host","0.0.0.0","--port","8000"]` | Container launch command |
 | image.repository | string | `"vllm/vllm-openai"` | Image repository |
-| image.tag | string | `"latest"` | Image tag |
+| image.tag | string | `"v0.31.0"` | Image tag |
 | labels.environment | string | `"test"` |  |
 | labels.release | string | `"test"` |  |
 | livenessProbe | object | `{"failureThreshold":5,"httpGet":{"path":"/health","port":8000},"initialDelaySeconds":15,"periodSeconds":10}` | Liveness probe configuration |
@@ -37,7 +60,7 @@ Chart vllm
 | livenessProbe.httpGet.port | int | `8000` | Name or number of the port to access on the container, on which the server is listening |
 | livenessProbe.initialDelaySeconds | int | `15` | Number of seconds after the container has started before liveness probe is initiated |
 | livenessProbe.periodSeconds | int | `10` | How often (in seconds) to perform the liveness probe |
-| maxUnavailablePodDisruptionBudget | string | `""` | Disruption Budget Configuration |
+| maxUnavailablePodDisruptionBudget | string or int | `""` | Disruption Budget Configuration |
 | readinessProbe | object | `{"failureThreshold":5,"httpGet":{"path":"/health","port":8000},"initialDelaySeconds":5,"periodSeconds":5}` | Readiness probe configuration |
 | readinessProbe.failureThreshold | int | `5` | Number of times after which if a probe fails in a row, Kubernetes considers that the overall check has failed: the container is not ready |
 | readinessProbe.httpGet | object | `{"path":"/health","port":8000}` | Configuration of the Kubelet http request on the server |
