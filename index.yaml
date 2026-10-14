@@ -241,6 +241,40 @@ entries:
   nvidia-gpu-exporter:
   - annotations:
       artifacthub.io/changes: |
+        - Update NVIDIA GPU Exporter to 1.15.1
+        - Preserve UID 0 for the chart's existing privileged host-device mounts
+      artifacthub.io/images: '[{"name":"nvidia_gpu_exporter","image":"ghcr.io/utkuozdemir/nvidia_gpu_exporter:1.15.1"}]'
+      artifacthub.io/license: MIT
+    apiVersion: v2
+    appVersion: 1.15.1
+    created: "2026-10-14T20:43:44.784220386Z"
+    description: Nvidia GPU exporter for prometheus using nvidia-smi binary to gather
+      metrics.
+    digest: 3fa5a3706f73974d343721e293195dc9b62c1d0e5c239f2e88c42f01d334a7d0
+    home: https://github.com/utkuozdemir/nvidia_gpu_exporter
+    icon: https://utkuozdemir.org/helm-charts/nvidia.png
+    keywords:
+    - nvidia
+    - gpu
+    - exporter
+    - nvidia-smi
+    - nvidia-gpu-exporter
+    - prometheus
+    maintainers:
+    - email: 12420863+danchev@users.noreply.github.com
+      name: Dobri Danchev
+      url: https://danchev.github.io/helm-charts/
+    name: nvidia-gpu-exporter
+    sources:
+    - https://github.com/danchev/helm-charts/tree/master/charts/nvidia-gpu-exporter
+    - https://github.com/utkuozdemir/nvidia_gpu_exporter
+    - https://github.com/utkuozdemir/helm-charts
+    type: application
+    urls:
+    - https://github.com/danchev/helm-charts/releases/download/nvidia-gpu-exporter-1.1.0/nvidia-gpu-exporter-1.1.0.tgz
+    version: 1.1.0
+  - annotations:
+      artifacthub.io/changes: |
         - Bump appVersion to 1.5.0
       artifacthub.io/images: '[{"name":"nvidia_gpu_exporter","image":"ghcr.io/utkuozdemir/nvidia_gpu_exporter:1.5.0"}]'
       artifacthub.io/license: MIT
@@ -415,4 +449,4 @@ entries:
     urls:
     - https://github.com/danchev/helm-charts/releases/download/vllm-0.0.1/vllm-0.0.1.tgz
     version: 0.0.1
-generated: "2026-10-14T20:41:27.537818601Z"
+generated: "2026-10-14T20:43:44.784267034Z"
