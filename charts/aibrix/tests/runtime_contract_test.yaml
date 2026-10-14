@@ -1,0 +1,263 @@
+suite: Controller and metrics runtime contracts
+templates:
+  - controller-manager/deployment.yaml
+  - controller-manager/service.yaml
+  - prometheus/monitor.yaml
+tests:
+  - it: disables certificate handling when admission webhooks are disabled
+    template: controller-manager/deployment.yaml
+    set:
+      webhook.enable: false
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: --disable-webhook
+      - notExists:
+          path: spec.template.spec.volumes
+      - notExists:
+          path: spec.template.spec.containers[0].volumeMounts
+
+  - it: monitors the HTTP endpoint and release-specific Service labels
+    template: prometheus/monitor.yaml
+    set:
+      prometheus.enable: true
+    asserts:
+      - equal:
+          path: spec.endpoints[0].port
+          value: http
+      - equal:
+          path: spec.endpoints[0].scheme
+          value: http
+      - equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/name: aibrix
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/component: aibrix-controller-manager
+
+  - it: exposes the matching metrics port
+    template: controller-manager/service.yaml
+    asserts:
+      - equal:
+          path: spec.ports[0].name
+          value: http
+      - equal:
+          path: spec.ports[0].targetPort
+          value: 8080
+
+  - it: preserves upstream custom timeout environment rendering
+    template: controller-manager/deployment.yaml
+    set:
+      controllerManager.container.envs.AIBRIX_GATEWAY_TIMEOUT_SECONDS: '300'
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: AIBRIX_GATEWAY_TIMEOUT_SECONDS
+            value: '300'
+
+---
+suite: Existing service accounts
+templates:
+  - controller-manager/rbac.yaml
+  - gateway-plugin/rbac.yaml
+  - metadata-service/rbac.yaml
+  - gpu-optimizer/rbac.yaml
+set:
+  controllerManager.serviceAccount.create: false
+  gatewayPlugin.serviceAccount.create: false
+  metadata.serviceAccount.create: false
+  gpuOptimizer.serviceAccount.create: false
+tests:
+  - it: does not recreate a controller ServiceAccount
+    template: controller-manager/rbac.yaml
+    asserts:
+      - hasDocuments:
+          count: 4
+      - isKind:
+          of: ClusterRole
+        documentIndex: 0
+  - it: does not recreate a gateway ServiceAccount
+    template: gateway-plugin/rbac.yaml
+    asserts:
+      - hasDocuments:
+          count: 2
+      - isKind:
+          of: ClusterRole
+        documentIndex: 0
+  - it: does not recreate a metadata ServiceAccount
+    template: metadata-service/rbac.yaml
+    asserts:
+      - hasDocuments:
+          count: 2
+      - isKind:
+          of: ClusterRole
+        documentIndex: 0
+  - it: does not recreate an optimizer ServiceAccount
+    template: gpu-optimizer/rbac.yaml
+    asserts:
+      - hasDocuments:
+          count: 2
+      - isKind:
+          of: ClusterRole
+        documentIndex: 0
+
+---
+suite: Batch worker contracts
+templates:
+  - metadata-service/deployment.yaml
+  - metadata-service/rbac.yaml
+tests:
+  - it: propagates authenticated Redis references to generated workers
+    template: metadata-service/deployment.yaml
+    set:
+      metadata.redis.password: test-password
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: WORKER_REDIS_PASSWORD_SECRET_NAME
+            value: RELEASE-NAME-aibrix-redis
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: WORKER_REDIS_PASSWORD_SECRET_KEY
+            value: metadata-service-redis-password
+
+  - it: grants the operations used by the released Deployment worker runtime
+    template: metadata-service/rbac.yaml
+    documentIndex: 1
+    asserts:
+      - contains:
+          path: rules
+          content:
+            apiGroups: [apps]
+            resources: [deployments]
+            verbs: [create, delete]
+      - contains:
+          path: rules
+          content:
+            apiGroups: [apps]
+            resources: [deployments/status]
+            verbs: [get]
+      - contains:
+          path: rules
+          content:
+            apiGroups: [apps]
+            resources: [deployments/status]
+            verbs: [get]
+      - contains:
+          path: rules
+          content:
+            apiGroups: ['']
+            resources: [services]
+            verbs: [create, delete]
+
+---
+suite: Telemetry and environment contracts
+templates:
+  - gateway-instance/gateway.yaml
+  - gateway-plugin/deployment.yaml
+  - validate.yaml
+tests:
+  - it: preserves a zero tracing sample rate
+    template: gateway-instance/gateway.yaml
+    documentSelector:
+      path: kind
+      value: EnvoyProxy
+    set:
+      openTelemetry.enable: true
+      openTelemetry.host: otel.example
+      openTelemetry.samplingRate: 0
+    asserts:
+      - equal:
+          path: spec.telemetry.tracing.samplingRate
+          value: 0
+
+  - it: rejects tracing without a collector endpoint
+    template: validate.yaml
+    set:
+      openTelemetry.enable: true
+    asserts:
+      - failedTemplate:
+          errorMessage: openTelemetry.enable requires openTelemetry.host or openTelemetry.serviceName.
+
+  - it: rejects whitespace-only bearer tokens that the binary treats as disabled
+    template: validate.yaml
+    set:
+      gatewayPlugin.auth.bearerToken: '   '
+    asserts:
+      - failedTemplate:
+          errorMessage: gatewayPlugin.auth.bearerToken must not contain only whitespace.
+
+  - it: preserves quotes and newlines in custom environment variables
+    template: gateway-plugin/deployment.yaml
+    set:
+      gatewayPlugin.container.envs.CUSTOM_CONFIG: "quoted \"value\"\nsecond line"
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: CUSTOM_CONFIG
+            value: "quoted \"value\"\nsecond line"
+
+  - it: preserves upstream Redis environment override rendering
+    template: gateway-plugin/deployment.yaml
+    set:
+      gatewayPlugin.container.envs.REDIS_HOST: redis.example
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: REDIS_HOST
+            value: redis.example
+
+---
+suite: Sidecar configuration contracts
+templates:
+  - gateway-plugin/service.yaml
+  - gateway-plugin/deployment.yaml
+  - gateway-instance/envoy_config.yaml
+set:
+  gateway.enable: false
+  gateway.envoyAsSideCar: true
+  gateway.envoySideCar.ports.http: 18080
+  gatewayPlugin.messageTimeout: 12s
+  gatewayPlugin.failOpen: true
+  gateway.envoyProxy.container.envoy.resources.requests.cpu: 150m
+tests:
+  - it: preserves upstream sidecar exposure and honors the custom listener port
+    template: gateway-plugin/service.yaml
+    asserts:
+      - equal:
+          path: spec.type
+          value: LoadBalancer
+      - contains:
+          path: spec.ports
+          content:
+            name: envoy-http
+            port: 18080
+            targetPort: 18080
+  - it: applies configured Envoy resources
+    template: gateway-plugin/deployment.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[1].resources.requests.cpu
+          value: 150m
+  - it: applies processing timeout and failure behavior
+    template: gateway-instance/envoy_config.yaml
+    asserts:
+      - matchRegex:
+          path: data["envoy.yaml"]
+          pattern: 'message_timeout: 12s'
+      - matchRegex:
+          path: data["envoy.yaml"]
+          pattern: 'failure_mode_allow: true'
+
+  - it: ignores managed-gateway tracing settings in sidecar mode
+    template: gateway-instance/envoy_config.yaml
+    set:
+      openTelemetry.enable: true
+    asserts:
+      - isKind:
+          of: ConfigMap

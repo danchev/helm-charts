@@ -25,6 +25,9 @@ spec:
         - --health-probe-bind-address=:8081
         - --metrics-bind-address=:8080
         - --enable-runtime-sidecar
+        {{- if not .Values.webhook.enable }}
+        - --disable-webhook
+        {{- end }}
         command:
         - /manager
         env:
@@ -52,19 +55,23 @@ spec:
           capabilities:
             drop:
             - ALL
+        {{- if .Values.webhook.enable }}
         volumeMounts:
         - mountPath: /tmp/k8s-webhook-server/serving-certs
           name: cert
           readOnly: true
+        {{- end }}
       securityContext:
         runAsNonRoot: true
       serviceAccountName: {{ include "aibrix.controllerManager.serviceAccountName" . }}
       terminationGracePeriodSeconds: 10
+      {{- if .Values.webhook.enable }}
       volumes:
       - name: cert
         secret:
           defaultMode: 420
           secretName: aibrix-webhook-server-cert
+      {{- end }}
       {{- with .Values.controllerManager.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}

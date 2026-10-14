@@ -15,6 +15,8 @@ spec:
       app.kubernetes.io/component: aibrix-metadata-service
   template:
     metadata:
+      annotations:
+        checksum/redis-auth: {{ include "aibrix.redis.authenticationChecksum" . }}
       labels:
         {{- include "aibrix.labels" . | nindent 8 }}
         app.kubernetes.io/component: aibrix-metadata-service
@@ -24,6 +26,7 @@ spec:
       initContainers:
         - name: init-redis
           image: {{ .Values.metadata.service.initContainer.image.repository }}:{{ .Values.metadata.service.initContainer.image.tag }}
+          imagePullPolicy: {{ .Values.metadata.service.initContainer.image.imagePullPolicy | default "IfNotPresent" }}
           {{- if include "aibrix.redis.connectionHasPassword" (dict "Values" .Values "component" "metadataService") }}
           env:
             - name: REDIS_PASSWORD
@@ -31,7 +34,14 @@ spec:
                 secretKeyRef:
                   name: {{ include "aibrix.fullname" . }}-redis
                   key: {{ include "aibrix.redis.connectionPasswordKey" (dict "component" "metadataService") }}
-          command: ['sh', '-c', 'until printf ''AUTH %s\nping\n'' "$REDIS_PASSWORD" | nc {{ $redisHost }} {{ .Values.metadata.service.redis.port }} -w 1 | grep -c PONG; do echo waiting for redis; sleep 2; done']
+          command:
+            - sh
+            - -c
+            - |
+              {{- include "aibrix.redis.authWaitCommand" . | nindent 14 }}
+            - redis-wait
+            - {{ $redisHost | quote }}
+            - {{ .Values.metadata.service.redis.port | quote }}
           {{- else }}
           command: ['sh', '-c', 'until echo "ping" | nc {{ $redisHost }} {{ .Values.metadata.service.redis.port }} -w 1 | grep -c PONG; do echo waiting for redis; sleep 2; done']
           {{- end }}
@@ -78,6 +88,12 @@ spec:
                 secretKeyRef:
                   name: {{ include "aibrix.fullname" . }}-redis
                   key: {{ include "aibrix.redis.connectionPasswordKey" (dict "component" "metadataService") }}
+            {{- end }}
+            {{- if include "aibrix.redis.connectionHasPassword" (dict "Values" .Values "component" "metadataService") }}
+            - name: WORKER_REDIS_PASSWORD_SECRET_NAME
+              value: {{ printf "%s-redis" (include "aibrix.fullname" .) | quote }}
+            - name: WORKER_REDIS_PASSWORD_SECRET_KEY
+              value: {{ include "aibrix.redis.connectionPasswordKey" (dict "component" "metadataService") | quote }}
             {{- end }}
             - name: POD_NAME
               valueFrom:

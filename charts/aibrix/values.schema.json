@@ -40,7 +40,7 @@
           "minimum": 1,
           "maximum": 3600,
           "description": "Gateway timeout in seconds"
-        }
+          }
       },
       "required": ["replicas", "container"]
     },
@@ -95,7 +95,7 @@
           "type": "string",
           "pattern": "^[0-9]+[smh]$",
           "description": "Message timeout (e.g., '60s', '5m')"
-        }
+          }
       },
       "required": ["replicaCount", "container"]
     },
@@ -132,9 +132,63 @@
     "gateway": {
       "type": "object",
       "properties": {
+        "http": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Whether to expose the gateway over HTTP"
+            }
+          }
+        },
+        "tls": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Whether to expose the gateway over HTTPS"
+            },
+            "autoGenerate": {
+              "type": "boolean",
+              "description": "Whether to generate a self-signed certificate into gateway.tls.secretName"
+            },
+            "hostname": {
+              "type": "string",
+              "description": "Optional Gateway listener hostname, for example *.example.com"
+            },
+            "validityDays": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Validity period in days for the generated self-signed certificate"
+            },
+            "secretName": {
+              "type": "string",
+              "description": "Name of the Kubernetes TLS secret referenced by the HTTPS listener"
+            },
+            "port": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535,
+              "description": "HTTPS listener port"
+            }
+          }
+        },
         "envoyProxy": {
           "type": "object",
           "properties": {
+            "accessLog": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Enable diagnostic JSON access logs for Envoy Gateway-managed proxies"
+                },
+                "extProcFilterName": {
+                  "type": "string",
+                  "description": "Override the ext_proc filter-state key; empty derives it from the release namespace and policy name"
+                }
+              }
+            },
             "replicas": {
               "type": "integer",
               "minimum": 1
@@ -192,6 +246,15 @@
         "envoyPatchPolicy": {
           "type": "object",
           "properties": {
+            "circuitBreakers": {
+              "type": "object",
+              "properties": {
+                "trackRemaining": {
+                  "type": "boolean",
+                  "description": "Expose gauges for resources remaining before the original destination cluster circuit breakers open"
+                }
+              }
+            },
             "route": {
               "type": "object",
               "properties": {
@@ -206,8 +269,67 @@
               }
             }
           }
-        }
-      }
+          }
+      },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "tls": {
+                    "required": ["enabled"],
+                  "properties": {
+                    "enabled": {
+                      "const": true
+                    }
+                  }
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "tls": {
+                    "required": ["secretName"],
+                    "properties": {
+                      "secretName": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "tls": {
+                    "required": ["enabled", "autoGenerate"],
+                    "properties": {
+                      "enabled": {
+                        "const": true
+                      },
+                      "autoGenerate": {
+                        "const": true
+                      }
+                    }
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "tls": {
+                    "required": ["hostname"],
+                    "properties": {
+                      "hostname": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    }
+                }
+              }
+            }
+          }
+        ]
     },
     "metadata": {
       "type": "object",
@@ -287,11 +409,11 @@
       "properties": {
         "enable": {
           "type": "boolean",
-          "description": "Whether to install CRDs"
+          "description": "Unused; use helm install --skip-crds to skip static CRD installation."
         },
         "keep": {
           "type": "boolean",
-          "description": "Whether to keep CRDs when uninstalling"
+          "description": "Unused; Helm retains static CRDs on uninstall."
         }
       },
       "required": ["enable", "keep"]
@@ -316,12 +438,24 @@
       },
       "required": ["enable"]
     },
+    "openTelemetry": {
+      "type": "object",
+      "properties": {
+        "enable": { "type": "boolean" },
+        "host": { "type": "string" },
+        "serviceName": { "type": "string" },
+        "namespace": { "type": "string" },
+        "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "samplingRate": { "type": "integer", "minimum": 0, "maximum": 100 }
+      },
+      "required": ["enable", "port", "samplingRate"]
+    },
     "certmanager": {
       "type": "object",
       "properties": {
         "enable": {
           "type": "boolean",
-          "description": "Whether to enable cert-manager integration"
+          "description": "Unused in this chart; controller metrics use HTTP and cert-manager is not configured."
         }
       },
       "required": ["enable"]
@@ -512,6 +646,23 @@
           "type": "string",
           "enum": ["Cluster", "Local"],
           "description": "Determines the external traffic policy for the Envoy Service"
+        },
+        "nodePorts": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Optional fixed NodePorts for enabled listeners; requires type NodePort and cannot be combined with patch.",
+          "properties": {
+            "http": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
+            },
+            "https": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
+            }
+          }
         },
         "patch": {
           "type": "object",

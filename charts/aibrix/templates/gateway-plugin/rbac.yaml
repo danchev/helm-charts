@@ -1,5 +1,6 @@
 {{- if or .Values.gateway.enable .Values.gateway.envoyAsSideCar }}
 ---
+{{- if .Values.gatewayPlugin.serviceAccount.create }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -9,6 +10,7 @@ metadata:
   labels:
     {{- include "aibrix.labels" . | nindent 4 }}
     app.kubernetes.io/component: aibrix-gateway-plugin
+{{- end }}
 ---
 
 apiVersion: rbac.authorization.k8s.io/v1
@@ -39,6 +41,14 @@ rules:
   - list
   - patch
   - update
+  - watch
+- apiGroups:
+  - model.aibrix.ai
+  resources:
+  - modelclaims
+  verbs:
+  - get
+  - list
   - watch
 - apiGroups:
   - gateway.networking.k8s.io

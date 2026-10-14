@@ -13,6 +13,8 @@ spec:
       app.kubernetes.io/component: aibrix-gpu-optimizer
   template:
     metadata:
+      annotations:
+        checksum/redis-auth: {{ include "aibrix.redis.authenticationChecksum" . }}
       labels:
         {{- include "aibrix.labels" . | nindent 8 }}
         app.kubernetes.io/component: aibrix-gpu-optimizer
@@ -23,6 +25,7 @@ spec:
       containers:
         - name: gpu-optimizer
           image: {{ .Values.gpuOptimizer.container.image.repository }}:{{ .Values.gpuOptimizer.container.image.tag }}
+          imagePullPolicy: {{ .Values.gpuOptimizer.container.image.imagePullPolicy | default "IfNotPresent" }}
           command: ["python", "-m", "aibrix.gpu_optimizer.app"]
           ports:
             - containerPort: 8080

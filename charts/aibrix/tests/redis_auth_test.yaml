@@ -1,0 +1,125 @@
+suite: Built-in Redis authentication
+templates:
+  - metadata-service/redis.yaml
+tests:
+  - it: leaves Redis unauthenticated when no password is configured
+    asserts:
+      - notExists:
+          path: spec.template.spec.containers[0].args
+        documentIndex: 0
+      - notExists:
+          path: spec.template.spec.containers[0].env
+        documentIndex: 0
+      - hasDocuments:
+          count: 2
+
+  - it: enforces authentication when explicitly enabled
+    set:
+      metadata.redis.enablePassword: true
+      metadata.redis.password: 'test password "$with-special-characters"'
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].args
+          value:
+            - --requirepass
+            - $(REDIS_PASSWORD)
+        documentIndex: 0
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-aibrix-redis
+                key: redis-password
+        documentIndex: 0
+
+  - it: also enforces authentication when only the shared password is set
+    set:
+      metadata.redis.enablePassword: false
+      metadata.redis.password: test-password
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].args
+          value:
+            - --requirepass
+            - $(REDIS_PASSWORD)
+        documentIndex: 0
+
+  - it: does not deploy a Redis server for external Redis authentication
+    set:
+      metadata.redis.enabled: false
+      gatewayPlugin.dependencies.redis.host: external-redis
+      metadata.service.redis.host: external-redis
+      gpuOptimizer.dependencies.redis.host: external-redis
+      metadata.redis.password: test-password
+    asserts:
+      - hasDocuments:
+          count: 1
+      - isKind:
+          of: Secret
+
+---
+suite: Redis authentication validation
+templates:
+  - validate.yaml
+tests:
+  - it: rejects enabling authentication without a password
+    set:
+      metadata.redis.enablePassword: true
+    asserts:
+      - failedTemplate:
+          errorMessage: metadata.redis.enablePassword=true requires a non-empty metadata.redis.password.
+
+  - it: rejects enabling authentication with a whitespace-only password
+    set:
+      metadata.redis.enablePassword: true
+      metadata.redis.password: '   '
+    asserts:
+      - failedTemplate:
+          errorMessage: metadata.redis.enablePassword=true requires a non-empty metadata.redis.password.
+
+---
+suite: Clients use the shared Redis password
+templates:
+  - gateway-plugin/deployment.yaml
+  - metadata-service/deployment.yaml
+  - gpu-optimizer/deployment.yaml
+set:
+  metadata.redis.password: test-password
+tests:
+  - it: configures gateway plugin authentication
+    template: gateway-plugin/deployment.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-aibrix-redis
+                key: gateway-plugin-redis-password
+
+  - it: configures metadata service authentication
+    template: metadata-service/deployment.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-aibrix-redis
+                key: metadata-service-redis-password
+
+  - it: configures GPU optimizer authentication
+    template: gpu-optimizer/deployment.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: RELEASE-NAME-aibrix-redis
+                key: gpu-optimizer-redis-password

@@ -1,0 +1,42 @@
+suite: Webhook service references
+templates:
+  - webhook/webhooks.yaml
+release:
+  name: custom-release
+  namespace: custom-namespace
+tests:
+  - it: registers the ModelWarmup validation endpoint implemented by the binary
+    documentIndex: 1
+    asserts:
+      - equal:
+          path: webhooks[7].name
+          value: vmodelwarmup.kb.io
+      - equal:
+          path: webhooks[7].clientConfig.service.path
+          value: /validate-model-aibrix-ai-v1alpha1-modelwarmup
+      - equal:
+          path: webhooks[7].failurePolicy
+          value: Fail
+  - it: routes deployment validation to the AIBrix service in the release namespace
+    documentIndex: 1
+    asserts:
+      - isKind:
+          of: ValidatingWebhookConfiguration
+      - equal:
+          path: webhooks[6].clientConfig.service.name
+          value: aibrix-webhook-service
+      - equal:
+          path: webhooks[6].clientConfig.service.namespace
+          value: custom-namespace
+
+  - it: uses the same service for deployment mutation
+    documentIndex: 0
+    asserts:
+      - isKind:
+          of: MutatingWebhookConfiguration
+      - equal:
+          path: webhooks[4].clientConfig.service.name
+          value: aibrix-webhook-service
+      - equal:
+          path: webhooks[4].clientConfig.service.namespace
+          value: custom-namespace

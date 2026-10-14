@@ -2,11 +2,13 @@ apiVersion: v2
 name: aibrix
 description: Cloud-native LLM inference infrastructure with distributed inference, KV caching, intelligent routing, and autoscaling capabilities
 type: application
-version: 0.7.0
-appVersion: "0.7.0"
+version: 0.8.0
+appVersion: "0.8.0"
 home: https://github.com/vllm-project/aibrix
 sources:
+  - https://github.com/danchev/helm-charts/tree/master/charts/aibrix
   - https://github.com/vllm-project/aibrix
+  - https://github.com/vllm-project/aibrix/tree/v0.8.0/dist/chart
 keywords:
   - ai
   - ai-gateway
@@ -19,8 +21,9 @@ keywords:
   - distributed-inference
   - disaggregation
 maintainers:
-  - name: AIBrix Team
-    url: https://github.com/vllm-project/aibrix
+  - name: Dobri Danchev
+    email: 12420863+danchev@users.noreply.github.com
+    url: https://danchev.github.io/helm-charts/
 annotations:
   category: AI Infra
 icon: https://github.com/vllm-project/aibrix/blob/main/docs/source/assets/logos/aibrix-logo.jpeg?raw=true

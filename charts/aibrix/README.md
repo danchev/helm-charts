@@ -1,6 +1,6 @@
 # aibrix
 
-![Version: 0.7.0](https://img.shields.io/badge/Version-0.7.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.7.0](https://img.shields.io/badge/AppVersion-0.7.0-informational?style=flat-square)
+![Version: 0.8.0](https://img.shields.io/badge/Version-0.8.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.8.0](https://img.shields.io/badge/AppVersion-0.8.0-informational?style=flat-square)
 
 Cloud-native LLM inference infrastructure with distributed inference, KV caching, intelligent routing, and autoscaling capabilities
 
@@ -10,55 +10,53 @@ Cloud-native LLM inference infrastructure with distributed inference, KV caching
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| AIBrix Team |  | <https://github.com/vllm-project/aibrix> |
+| Dobri Danchev | <12420863+danchev@users.noreply.github.com> | <https://danchev.github.io/helm-charts/> |
 
 ## Source Code
 
+* <https://github.com/danchev/helm-charts/tree/master/charts/aibrix>
 * <https://github.com/vllm-project/aibrix>
+* <https://github.com/vllm-project/aibrix/tree/v0.8.0/dist/chart>
+
+This chart is derived from the [AIBrix Team's upstream chart](https://github.com/vllm-project/aibrix/tree/v0.8.0/dist/chart).
 
 ## Installation
 
 ### Dependencies
-Apply required dependencies:
+
+```bash
+kubectl apply --server-side -k https://github.com/vllm-project/aibrix/config/dependency?ref=v0.8.0
 ```
-kubectl apply --server-side -k https://github.com/vllm-project/aibrix/config/dependency?ref=v0.7.0
-```
+
+Optional integrations need Prometheus Operator, KubeRay operator, or a tracing
+collector, as applicable.
 
 ### Helm Install
 
-Install AIBrix with the default values:
-```
-helm repo add aibrix https://danchev.github.io/helm-charts
-helm install aibrix aibrix/aibrix -n aibrix-system --create-namespace
-```
-
-Or use a custom values file:
-
-```
-helm install aibrix aibrix/aibrix -f my-values.yaml -n aibrix-system --create-namespace
+```bash
+helm repo add danchev https://danchev.github.io/helm-charts
+helm repo update danchev
+helm install aibrix danchev/aibrix --version 0.8.0 -n aibrix-system --create-namespace
 ```
 
+Add `-f my-values.yaml` to customize the installation.
 
-### Verification
+### Configuration requirements
 
-```
-helm list -A
-kubectl get all -n aibrix-system
-```
+- Automatic routing requires release name `aibrix` (or `fullnameOverride: aibrix`)
+  in namespace `aibrix-system`.
+- Use one webhook-enabled control plane per cluster; webhook names are shared.
+- Bearer authentication covers plugin-processed requests, not every Gateway route.
 
+See [troubleshooting](TROUBLESHOOTING.md) for details.
 
 ### Helm upgrade
 
-Upgrade to the latest chart version:
-```
-helm upgrade aibrix aibrix/aibrix -n aibrix-system
-```
-
+Follow the [upgrade guide](UPGRADING.md) for dependency, CRD, and values changes.
 
 ### Helm Uninstall
 
-Remove the release:
-```
+```bash
 helm uninstall aibrix -n aibrix-system
 ```
 
@@ -66,12 +64,12 @@ helm uninstall aibrix -n aibrix-system
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| certmanager.enable | bool | `false` |  |
+| certmanager.enable | bool | `false` | Unused in this chart; controller metrics use HTTP. |
 | controllerManager.affinity | object | `{}` |  |
 | controllerManager.container.envs | object | `{}` |  |
 | controllerManager.container.image.imagePullPolicy | string | `"IfNotPresent"` |  |
 | controllerManager.container.image.repository | string | `"aibrix/controller-manager"` |  |
-| controllerManager.container.image.tag | string | `"v0.7.0"` |  |
+| controllerManager.container.image.tag | string | `"v0.8.0"` |  |
 | controllerManager.container.probes.liveness.httpGet.path | string | `"/healthz"` |  |
 | controllerManager.container.probes.liveness.httpGet.port | int | `8081` |  |
 | controllerManager.container.probes.liveness.initialDelaySeconds | int | `15` |  |
@@ -91,8 +89,8 @@ helm uninstall aibrix -n aibrix-system
 | controllerManager.serviceAccount.create | bool | `true` |  |
 | controllerManager.serviceAccount.name | string | `""` |  |
 | controllerManager.tolerations | list | `[]` |  |
-| crd.enable | bool | `true` |  |
-| crd.keep | bool | `true` |  |
+| crd.enable | bool | `true` | Unused; use `helm install --skip-crds` |
+| crd.keep | bool | `true` | Unused; Helm retains CRDs on uninstall |
 | fullnameOverride | string | `""` |  |
 | gateway.backendTrafficPolicy.circuitBreaker.maxConnections | int | `1024` |  |
 | gateway.backendTrafficPolicy.circuitBreaker.maxParallelRequests | int | `1024` |  |
@@ -108,10 +106,13 @@ helm uninstall aibrix -n aibrix-system
 | gateway.envoyPatchPolicy.circuitBreakers.maxConnections | int | `1024` |  |
 | gateway.envoyPatchPolicy.circuitBreakers.maxPendingRequests | int | `1024` |  |
 | gateway.envoyPatchPolicy.circuitBreakers.maxRequests | int | `1024` |  |
+| gateway.envoyPatchPolicy.circuitBreakers.trackRemaining | bool | `true` |  |
 | gateway.envoyPatchPolicy.preserveExternalRequestID | bool | `false` |  |
 | gateway.envoyPatchPolicy.route.connectTimeout | string | `"6s"` |  |
 | gateway.envoyPatchPolicy.route.idleTimeout | string | `"300s"` |  |
 | gateway.envoyPatchPolicy.route.timeout | string | `"120s"` |  |
+| gateway.envoyProxy.accessLog.enabled | bool | `false` |  |
+| gateway.envoyProxy.accessLog.extProcFilterName | string | `""` |  |
 | gateway.envoyProxy.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].key | string | `"nvidia.com/gpu.present"` |  |
 | gateway.envoyProxy.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].operator | string | `"NotIn"` |  |
 | gateway.envoyProxy.affinity.nodeAffinity.preferredDuringSchedulingIgnoredDuringExecution[0].preference.matchExpressions[0].values[0] | string | `"true"` |  |
@@ -131,19 +132,28 @@ helm uninstall aibrix -n aibrix-system
 | gateway.envoyProxy.container.shutdownManager.resources.requests.memory | string | `"32Mi"` |  |
 | gateway.envoyProxy.imagePullSecrets | list | `[]` |  |
 | gateway.envoyProxy.replicas | int | `1` |  |
+| gateway.envoyProxy.service | object | `{}` | Managed gateway Service overrides; empty inherits Envoy Gateway v1.2.8 LoadBalancer default. |
 | gateway.envoyProxy.tolerations | list | `[]` |  |
 | gateway.envoySideCar.ports.http | int | `10080` |  |
+| gateway.http.enabled | bool | `true` |  |
+| gateway.tls.autoGenerate | bool | `false` |  |
+| gateway.tls.enabled | bool | `false` |  |
+| gateway.tls.hostname | string | `""` |  |
+| gateway.tls.port | int | `443` |  |
+| gateway.tls.secretName | string | `""` |  |
+| gateway.tls.validityDays | int | `365` |  |
+| gatewayPlugin.auth.bearerToken | string | `""` |  |
 | gatewayPlugin.container.envs.AIBRIX_GRPC_MAX_MESSAGE_SIZE_BYTES | string | `"4194304"` |  |
+| gatewayPlugin.container.envs.AIBRIX_LOAD_BALANCE_IMBALANCE_MIN_GAP | string | `"16"` |  |
 | gatewayPlugin.container.envs.AIBRIX_POD_METRIC_REFRESH_INTERVAL_MS | string | `"50"` |  |
 | gatewayPlugin.container.envs.AIBRIX_PREFILL_REQUEST_TIMEOUT | string | `"60"` |  |
 | gatewayPlugin.container.envs.AIBRIX_PREFIX_CACHE_BLOCK_SIZE | string | `"128"` |  |
-| gatewayPlugin.container.envs.AIBRIX_PREFIX_CACHE_POD_RUNNING_REQUEST_IMBALANCE_ABS_COUNT | string | `"16"` |  |
 | gatewayPlugin.container.envs.AIBRIX_PREFIX_CACHE_STANDARD_DEVIATION_FACTOR | string | `"2"` |  |
 | gatewayPlugin.container.envs.AIBRIX_PREFIX_CACHE_TOKENIZER_TYPE | string | `"character"` |  |
 | gatewayPlugin.container.envs.AIBRIX_STATESYNC_ENABLED | string | `"false"` |  |
 | gatewayPlugin.container.image.imagePullPolicy | string | `"IfNotPresent"` |  |
 | gatewayPlugin.container.image.repository | string | `"aibrix/gateway-plugins"` |  |
-| gatewayPlugin.container.image.tag | string | `"v0.7.0"` |  |
+| gatewayPlugin.container.image.tag | string | `"v0.8.0"` |  |
 | gatewayPlugin.container.probes.liveness.failureThreshold | int | `3` |  |
 | gatewayPlugin.container.probes.liveness.grpc.port | int | `50052` |  |
 | gatewayPlugin.container.probes.liveness.initialDelaySeconds | int | `5` |  |
@@ -168,6 +178,7 @@ helm uninstall aibrix -n aibrix-system
 | gatewayPlugin.extProc.backendSettings.circuitBreaker.maxRequestsPerConnection | int | `1024` |  |
 | gatewayPlugin.failOpen | bool | `false` |  |
 | gatewayPlugin.imagePullSecrets | list | `[]` |  |
+| gatewayPlugin.initContainer.image.imagePullPolicy | string | `"IfNotPresent"` |  |
 | gatewayPlugin.initContainer.image.repository | string | `"busybox"` |  |
 | gatewayPlugin.initContainer.image.tag | string | `"stable"` |  |
 | gatewayPlugin.messageTimeout | string | `"60s"` |  |
@@ -179,8 +190,9 @@ helm uninstall aibrix -n aibrix-system
 | gatewayPlugin.tolerations | list | `[]` |  |
 | global.imagePullSecrets | list | `[]` |  |
 | gpuOptimizer.affinity | object | `{}` |  |
+| gpuOptimizer.container.image.imagePullPolicy | string | `"IfNotPresent"` |  |
 | gpuOptimizer.container.image.repository | string | `"aibrix/metadata-service"` |  |
-| gpuOptimizer.container.image.tag | string | `"v0.7.0"` |  |
+| gpuOptimizer.container.image.tag | string | `"v0.8.0"` |  |
 | gpuOptimizer.container.resources.limits.cpu | string | `"500m"` |  |
 | gpuOptimizer.container.resources.limits.memory | string | `"256Mi"` |  |
 | gpuOptimizer.container.resources.requests.cpu | string | `"10m"` |  |
@@ -194,6 +206,7 @@ helm uninstall aibrix -n aibrix-system
 | gpuOptimizer.serviceAccount.create | bool | `true` |  |
 | gpuOptimizer.serviceAccount.name | string | `""` |  |
 | gpuOptimizer.tolerations | list | `[]` |  |
+| metadata.redis.container.image.imagePullPolicy | string | `"IfNotPresent"` |  |
 | metadata.redis.container.image.repository | string | `"redis"` |  |
 | metadata.redis.container.image.tag | string | `"7.4"` |  |
 | metadata.redis.container.resources.requests.cpu | string | `"100m"` |  |
@@ -206,12 +219,13 @@ helm uninstall aibrix -n aibrix-system
 | metadata.service.affinity | object | `{}` |  |
 | metadata.service.container.image.imagePullPolicy | string | `"IfNotPresent"` |  |
 | metadata.service.container.image.repository | string | `"aibrix/metadata-service"` |  |
-| metadata.service.container.image.tag | string | `"v0.7.0"` |  |
+| metadata.service.container.image.tag | string | `"v0.8.0"` |  |
 | metadata.service.container.resources.limits.cpu | string | `"500m"` |  |
 | metadata.service.container.resources.limits.memory | string | `"512Mi"` |  |
 | metadata.service.container.resources.requests.cpu | string | `"50m"` |  |
 | metadata.service.container.resources.requests.memory | string | `"128Mi"` |  |
 | metadata.service.imagePullSecrets | list | `[]` |  |
+| metadata.service.initContainer.image.imagePullPolicy | string | `"IfNotPresent"` |  |
 | metadata.service.initContainer.image.repository | string | `"busybox"` |  |
 | metadata.service.initContainer.image.tag | string | `"stable"` |  |
 | metadata.service.redis.host | string | `""` |  |
@@ -227,8 +241,7 @@ helm uninstall aibrix -n aibrix-system
 | openTelemetry.host | string | `""` |  |
 | openTelemetry.namespace | string | `""` |  |
 | openTelemetry.port | int | `4317` |  |
-| openTelemetry.samplingRate | Envoy-side only | `100` | The sampling rate for distributed tracing. Note: This configuration currently only applies to Envoy's internal tracing. The external authorization/processing plugin (Go service) currently uses a default always-on sampler (100%). If you set this to a low value (e.g., 10), be aware that the Go plugin will still export spans for all requests it processes. |
+| openTelemetry.samplingRate | int | `100` | Envoy sampling percentage (0–100). Go plugin export requires separate OTEL endpoint configuration. |
 | openTelemetry.serviceName | string | `""` |  |
 | prometheus.enable | bool | `false` |  |
 | webhook.enable | bool | `true` |  |
-

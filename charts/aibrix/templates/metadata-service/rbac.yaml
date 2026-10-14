@@ -1,3 +1,4 @@
+{{- if .Values.metadata.serviceAccount.create }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -7,6 +8,7 @@ metadata:
   labels:
     {{- include "aibrix.labels" . | nindent 4 }}
     app.kubernetes.io/component: aibrix-metadata-service
+{{- end }}
 ---
 
 apiVersion: rbac.authorization.k8s.io/v1
@@ -29,6 +31,16 @@ rules:
   - apiGroups: ["batch"]
     resources: ["jobs"]
     verbs: ["get", "list", "create", "patch", "delete"]
+  # K8sDeploymentRuntime creates/polls/deletes Deployments and their Services.
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["create", "delete"]
+  - apiGroups: ["apps"]
+    resources: ["deployments/status"]
+    verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["create", "delete"]
 ---
 
 apiVersion: rbac.authorization.k8s.io/v1

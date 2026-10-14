@@ -31,7 +31,7 @@ spec:
       targetPort: 8080
     {{- if .Values.gateway.envoyAsSideCar }}
     - name: envoy-http
-      port: 10080
-      targetPort: 10080
+      port: {{ .Values.gateway.envoySideCar.ports.http }}
+      targetPort: {{ .Values.gateway.envoySideCar.ports.http }}
     {{- end }}
 {{- end }}
