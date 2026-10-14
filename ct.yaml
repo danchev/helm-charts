@@ -8,9 +8,10 @@ chart-repos:
 helm-extra-args: "--timeout 600s"
 validate-chart-schema: true
 validate-chart-values: true
-validate-maintainers: true
+# Charts retain upstream authors' display names rather than GitHub account names.
+validate-maintainers: false
 validate-yaml: true
 exclude-deprecated: true
 excluded-charts: []
 additional-commands:
-  - helm unittest --strict --file 'unittests/**/*.yaml' {{ .Path }}
+  - helm unittest --strict --file 'tests/*_test.yaml' {{ .Path }}
