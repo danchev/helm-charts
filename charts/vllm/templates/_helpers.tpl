@@ -1,6 +1,11 @@
 {{/*
 Define ports for the pods
 */}}
+{{- define "chart.selectorLabels" -}}
+app.kubernetes.io/name: {{ .Chart.Name }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
 {{- define "chart.container-port" -}}
 {{-  default "8000" .Values.containerPort }}
 {{- end }}
@@ -9,11 +14,7 @@ Define ports for the pods
 Define service name
 */}}
 {{- define "chart.service-name" -}}
-{{-  if .Values.serviceName }}
-{{-    .Values.serviceName | lower | trim }}
-{{-  else }}
-"{{ .Release.Name }}-service"
-{{-  end }}
+{{- default (printf "%s-service" .Release.Name) .Values.serviceName | lower | trim -}}
 {{- end }}
 
 {{/*
@@ -158,7 +159,6 @@ runAsUser:
   Define chart labels
 */}}
 {{- define "chart.labels" -}}
-{{-   with .Values.labels -}}
-{{      toYaml . }}
-{{-   end }}
+{{- $labels := mergeOverwrite (dict) (deepCopy (.Values.labels | default (dict))) (include "chart.selectorLabels" . | fromYaml) -}}
+{{- toYaml $labels }}
 {{- end }}

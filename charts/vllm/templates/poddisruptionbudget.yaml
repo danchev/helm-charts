@@ -4,4 +4,7 @@ metadata:
   name: "{{ .Release.Name }}-pdb"
   namespace: {{ .Release.Namespace }}
 spec:
-  maxUnavailable: {{ default 1 .Values.maxUnavailablePodDisruptionBudget }}
+  maxUnavailable: {{ if eq (toString .Values.maxUnavailablePodDisruptionBudget) "" }}1{{ else }}{{ .Values.maxUnavailablePodDisruptionBudget }}{{ end }}
+  selector:
+    matchLabels:
+      {{- include "chart.selectorLabels" . | nindent 6 }}

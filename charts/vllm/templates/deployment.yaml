@@ -6,18 +6,18 @@ metadata:
   labels:
   {{- include "chart.labels" . | nindent 4 }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
+  {{- end }}
   {{- include "chart.strategy" . | nindent 2 }}
-  selector:                                                                                                                                  
+  selector:
     matchLabels:
-      environment: "test"
-      release: "test"
+      {{- include "chart.selectorLabels" . | nindent 6 }}
   progressDeadlineSeconds: 1200
   template:
     metadata:
       labels:
-        environment: "test"
-        release: "test"
+        {{- include "chart.labels" . | nindent 8 }}
     spec:
       containers:
         - name: "vllm"
@@ -119,4 +119,4 @@ spec:
                   values:
                     {{- toYaml . | nindent 20 }}
                   {{- end }}
-      {{- end }} 
+      {{- end }}

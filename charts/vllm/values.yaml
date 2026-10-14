@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/danchev/helm-charts/main/charts/vllm/values.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/danchev/helm-charts/master/charts/vllm/values.schema.json
 # -- Default values for chart vllm
 # -- Declare variables to be passed into your templates.
 
@@ -7,7 +7,7 @@ image:
   # -- Image repository
   repository: "vllm/vllm-openai"
   # -- Image tag
-  tag: "latest"
+  tag: "v0.31.0"
   # -- Container launch command
   command: ["vllm", "serve", "/data/", "--served-model-name", "opt-125m", "--dtype", "float32", "--block-size", "16", "--host", "0.0.0.0", "--port", "8000"]
 

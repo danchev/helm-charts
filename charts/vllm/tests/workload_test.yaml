@@ -1,0 +1,101 @@
+suite: Release-scoped workload routing
+templates:
+  - deployment.yaml
+  - service.yaml
+  - poddisruptionbudget.yaml
+  - hpa.yaml
+release:
+  name: inference-blue
+  namespace: inference
+tests:
+  - it: keeps custom labels on pods while protecting release selectors
+    template: deployment.yaml
+    set:
+      labels:
+        environment: production
+        release: custom-label
+        app.kubernetes.io/instance: another-release
+    asserts:
+      - equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/name: vllm
+            app.kubernetes.io/instance: inference-blue
+      - equal:
+          path: spec.template.metadata.labels
+          value:
+            environment: production
+            release: custom-label
+            app.kubernetes.io/name: vllm
+            app.kubernetes.io/instance: inference-blue
+
+  - it: routes the Service to this release regardless of custom labels
+    template: service.yaml
+    set:
+      labels.environment: production
+      labels.release: custom-label
+    asserts:
+      - equal:
+          path: metadata.name
+          value: inference-blue-service
+      - equal:
+          path: spec.selector
+          value:
+            app.kubernetes.io/name: vllm
+            app.kubernetes.io/instance: inference-blue
+
+  - it: honors a custom Service name
+    template: service.yaml
+    set:
+      serviceName: inference-api
+    asserts:
+      - equal:
+          path: metadata.name
+          value: inference-api
+
+  - it: scopes disruption protection to this release and honors zero
+    template: poddisruptionbudget.yaml
+    set:
+      maxUnavailablePodDisruptionBudget: 0
+    asserts:
+      - equal:
+          path: spec.maxUnavailable
+          value: 0
+      - equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/name: vllm
+            app.kubernetes.io/instance: inference-blue
+
+  - it: targets the actual Deployment when autoscaling is enabled
+    template: hpa.yaml
+    set:
+      autoscaling.enabled: true
+    asserts:
+      - equal:
+          path: spec.scaleTargetRef.name
+          value: inference-blue-deployment-vllm
+
+  - it: leaves replicas under HPA control
+    template: deployment.yaml
+    set:
+      autoscaling.enabled: true
+      replicaCount: 5
+    asserts:
+      - notExists:
+          path: spec.replicas
+
+  - it: honors the configured replicas without autoscaling
+    template: deployment.yaml
+    set:
+      replicaCount: 3
+    asserts:
+      - equal:
+          path: spec.replicas
+          value: 3
+
+  - it: does not render an HPA by default
+    template: hpa.yaml
+    asserts:
+      - hasDocuments:
+          count: 0

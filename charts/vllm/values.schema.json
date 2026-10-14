@@ -28,7 +28,10 @@
             "type": "integer"
         },
         "serviceName": {
-            "type": "null"
+            "type": [
+                "string",
+                "null"
+            ]
         },
         "servicePort": {
             "type": "integer"
@@ -131,7 +134,11 @@
             "type": "array"
         },
         "maxUnavailablePodDisruptionBudget": {
-            "type": "string"
+            "type": [
+                "string",
+                "integer"
+            ],
+            "minimum": 0
         },
         "extraInit": {
             "type": "object",
