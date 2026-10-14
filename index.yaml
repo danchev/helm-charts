@@ -5,7 +5,7 @@ entries:
       category: AI Infra
     apiVersion: v2
     appVersion: 0.7.0
-    created: "2026-06-22T02:19:48.673930114Z"
+    created: '2026-10-14T16:20:35.567396591-05:00'
     description: Cloud-native LLM inference infrastructure with distributed inference,
       KV caching, intelligent routing, and autoscaling capabilities
     digest: e96df8524fdeda696cc82a423272514986cb6fc48f659475fb62c3c7120b7314
@@ -36,7 +36,7 @@ entries:
       category: AI Infra
     apiVersion: v2
     appVersion: 0.5.0
-    created: "2025-11-21T19:54:48.531090609Z"
+    created: '2026-10-14T16:20:35.564141386-05:00'
     description: Cloud-native LLM inference infrastructure with distributed inference,
       KV caching, intelligent routing, and autoscaling capabilities
     digest: 13fdc3025ab46c72dc0cd9c23d1b051458b66bc2c326cd8c2a92440662d55ab1
@@ -67,10 +67,10 @@ entries:
       category: AI Infra
     apiVersion: v2
     appVersion: 0.4.1
-    created: "2025-09-02T16:20:43.727681543Z"
+    created: '2026-10-14T16:20:35.560709093-05:00'
     description: Cloud-native LLM inference infrastructure with distributed inference,
       KV caching, intelligent routing, and autoscaling capabilities
-    digest: 426d0363f09b2577ea9786fd6e580553de90aa896da207432f744744f7626547
+    digest: c0aff5b1f33fa5c483e5052f1acbe7a95516ee824825bb9b2790e9b6869bdb88
     home: https://github.com/vllm-project/aibrix
     keywords:
     - ai
@@ -93,16 +93,59 @@ entries:
     urls:
     - https://github.com/danchev/helm-charts/releases/download/aibrix-0.4.1/aibrix-0.4.1.tgz
     version: 0.4.1
+  chart-vllm:
+  - apiVersion: v2
+    created: '2026-10-14T16:20:35.567684559-05:00'
+    description: Chart vllm
+    digest: 22c79b78e306498279d4be6451ec197c77594adb7efe76857c1e8715f568821b
+    maintainers:
+    - name: mfournioux
+    name: chart-vllm
+    type: application
+    urls:
+    - https://github.com/danchev/helm-charts/releases/download/chart-vllm-0.0.1/chart-vllm-0.0.1.tgz
+    version: 0.0.1
   kuberay-dashboard:
   - annotations:
-      artifacthub.io/changes: |
-        - Update appVersion to v1.7.0
+      artifacthub.io/changes: '- Update appVersion to v1.7.1
+
+        '
+      artifacthub.io/images: '[{"name":"kuberay-dashboard","image":"quay.io/kuberay/dashboard:v1.7.1"}]'
+      artifacthub.io/license: Apache-2.0
+      category: AI Infra
+    apiVersion: v2
+    appVersion: v1.7.1
+    created: '2026-10-14T16:20:35.570025148-05:00'
+    description: A Helm chart for Ray Dashboard
+    digest: 28e53fcf8bd5e35a207623b4660fba76486e3d4d525f45acd0b0f2d487b17aa3
+    home: https://github.com/ray-project/kuberay/tree/master/dashboard
+    icon: https://raw.githubusercontent.com/ray-project/kuberay/master/dashboard/public/ray.png
+    keywords:
+    - ray
+    - dashboard
+    - kuberay
+    - kuberay-dashboard
+    maintainers:
+    - email: 12420863+danchev@users.noreply.github.com
+      name: Dobri Danchev
+      url: https://danchev.github.io/helm-charts/
+    name: kuberay-dashboard
+    sources:
+    - https://github.com/danchev/helm-charts/tree/master/charts/kuberay-dashboard
+    type: application
+    urls:
+    - https://github.com/danchev/helm-charts/releases/download/kuberay-dashboard-0.0.6/kuberay-dashboard-0.0.6.tgz
+    version: 0.0.6
+  - annotations:
+      artifacthub.io/changes: '- Update appVersion to v1.7.0
+
+        '
       artifacthub.io/images: '[{"name":"kuberay-dashboard","image":"quay.io/kuberay/dashboard:v1.7.0"}]'
       artifacthub.io/license: Apache-2.0
       category: AI Infra
     apiVersion: v2
     appVersion: v1.7.0
-    created: "2026-09-09T10:59:15.803724693Z"
+    created: '2026-10-14T16:20:35.56962787-05:00'
     description: A Helm chart for Ray Dashboard
     digest: 2742d382832abbeb7f4748128498ed7588376cf7344af195cb6bccc495be1777
     home: https://github.com/ray-project/kuberay/tree/master/dashboard
@@ -124,14 +167,15 @@ entries:
     - https://github.com/danchev/helm-charts/releases/download/kuberay-dashboard-0.0.5/kuberay-dashboard-0.0.5.tgz
     version: 0.0.5
   - annotations:
-      artifacthub.io/changes: |
-        - Update appVersion to v1.6.2
+      artifacthub.io/changes: '- Update appVersion to v1.6.2
+
+        '
       artifacthub.io/images: '[{"name":"kuberay-dashboard","image":"quay.io/kuberay/dashboard:v1.6.2"}]'
       artifacthub.io/license: Apache-2.0
       category: AI Infra
     apiVersion: v2
     appVersion: v1.6.2
-    created: "2026-06-21T14:32:30.596695104Z"
+    created: '2026-10-14T16:20:35.568961643-05:00'
     description: A Helm chart for Ray Dashboard
     digest: f6ace18ff2f00c693e003ce5264d8cfb69f8aab234f344af647baec2d6667cd7
     home: https://github.com/ray-project/kuberay/tree/master/dashboard
@@ -153,14 +197,15 @@ entries:
     - https://github.com/danchev/helm-charts/releases/download/kuberay-dashboard-0.0.4/kuberay-dashboard-0.0.4.tgz
     version: 0.0.4
   - annotations:
-      artifacthub.io/changes: |
-        - Update appVersion to v1.6.1
+      artifacthub.io/changes: '- Update appVersion to v1.6.1
+
+        '
       artifacthub.io/images: '[{"name":"kuberay-dashboard","image":"quay.io/kuberay/dashboard:v1.6.1"}]'
       artifacthub.io/license: Apache-2.0
       category: AI Infra
     apiVersion: v2
     appVersion: v1.6.1
-    created: "2026-04-24T14:48:30.511815727Z"
+    created: '2026-10-14T16:20:35.568632175-05:00'
     description: A Helm chart for Ray Dashboard
     digest: 9017af1147410c20ad3f3842a4460741b240ca51c1dfee17a05394c583558c96
     home: https://github.com/ray-project/kuberay/tree/master/dashboard
@@ -182,14 +227,15 @@ entries:
     - https://github.com/danchev/helm-charts/releases/download/kuberay-dashboard-0.0.3/kuberay-dashboard-0.0.3.tgz
     version: 0.0.3
   - annotations:
-      artifacthub.io/changes: |
-        - Update appVersion to v1.5.1
+      artifacthub.io/changes: '- Update appVersion to v1.5.1
+
+        '
       artifacthub.io/images: '[{"name":"kuberay-dashboard","image":"quay.io/kuberay/dashboard:v1.5.1"}]'
       artifacthub.io/license: Apache-2.0
       category: AI Infra
     apiVersion: v2
     appVersion: v1.5.1
-    created: "2025-11-21T23:11:44.597280847Z"
+    created: '2026-10-14T16:20:35.568335586-05:00'
     description: A Helm chart for Ray Dashboard
     digest: 0da09bb5aa142ea6b4d908f539b36593e3da99e34ed5d542e0d58557a91e9fbc
     home: https://github.com/ray-project/kuberay/tree/master/dashboard
@@ -211,15 +257,17 @@ entries:
     - https://github.com/danchev/helm-charts/releases/download/kuberay-dashboard-0.0.2/kuberay-dashboard-0.0.2.tgz
     version: 0.0.2
   - annotations:
-      artifacthub.io/changes: |
-        - Initial release of kuberay-dashboard chart version 0.0.1
+      artifacthub.io/changes: '- Initial release of kuberay-dashboard chart version
+        0.0.1
+
+        '
       artifacthub.io/images: '[{"name":"kuberay-dashboard","image":"quay.io/kuberay/dashboard:v1.5.0"}]'
       artifacthub.io/license: Apache-2.0
     apiVersion: v2
     appVersion: v1.5.0
-    created: "2025-11-21T10:19:36.540717832-06:00"
+    created: '2026-10-14T16:20:35.568016998-05:00'
     description: A Helm chart for Ray Dashboard
-    digest: 866978decbc2d789ff99660f8b96f589d34b21b7807efd70be9b246c712cf610
+    digest: f3a42059f6021cd064c6f97b874d10123bf9626ae9ed1439df2388d9f3ad8fd2
     home: https://github.com/ray-project/kuberay/tree/master/dashboard
     icon: https://raw.githubusercontent.com/ray-project/kuberay/master/dashboard/public/ray.png
     keywords:
@@ -240,14 +288,16 @@ entries:
     version: 0.0.1
   nvidia-gpu-exporter:
   - annotations:
-      artifacthub.io/changes: |
-        - Update NVIDIA GPU Exporter to 1.15.1
-        - Preserve UID 0 for the chart's existing privileged host-device mounts
+      artifacthub.io/changes: '- Update NVIDIA GPU Exporter to 1.15.1
+
+        - Preserve UID 0 for the chart''s existing privileged host-device mounts
+
+        '
       artifacthub.io/images: '[{"name":"nvidia_gpu_exporter","image":"ghcr.io/utkuozdemir/nvidia_gpu_exporter:1.15.1"}]'
       artifacthub.io/license: MIT
     apiVersion: v2
     appVersion: 1.15.1
-    created: "2026-10-14T20:43:44.784220386Z"
+    created: '2026-10-14T16:20:35.571481521-05:00'
     description: Nvidia GPU exporter for prometheus using nvidia-smi binary to gather
       metrics.
     digest: 3fa5a3706f73974d343721e293195dc9b62c1d0e5c239f2e88c42f01d334a7d0
@@ -274,13 +324,14 @@ entries:
     - https://github.com/danchev/helm-charts/releases/download/nvidia-gpu-exporter-1.1.0/nvidia-gpu-exporter-1.1.0.tgz
     version: 1.1.0
   - annotations:
-      artifacthub.io/changes: |
-        - Bump appVersion to 1.5.0
+      artifacthub.io/changes: '- Bump appVersion to 1.5.0
+
+        '
       artifacthub.io/images: '[{"name":"nvidia_gpu_exporter","image":"ghcr.io/utkuozdemir/nvidia_gpu_exporter:1.5.0"}]'
       artifacthub.io/license: MIT
     apiVersion: v2
     appVersion: 1.5.0
-    created: "2026-06-22T00:56:04.952324932Z"
+    created: '2026-10-14T16:20:35.571121033-05:00'
     description: Nvidia GPU exporter for prometheus using nvidia-smi binary to gather
       metrics.
     digest: 022bc8fbad8e19962171bffc6166d835cb59faa326d6314cc60831051d7798f3
@@ -295,7 +346,7 @@ entries:
     - prometheus
     maintainers:
     - email: utkuozdemir@gmail.com
-      name: Utku Özdemir
+      name: "Utku \xD6zdemir"
       url: https://utkuozdemir.org
     name: nvidia-gpu-exporter
     sources:
@@ -305,15 +356,14 @@ entries:
     - https://github.com/danchev/helm-charts/releases/download/nvidia-gpu-exporter-1.0.3/nvidia-gpu-exporter-1.0.3.tgz
     version: 1.0.3
   - annotations:
-      artifacthub.io/changes: |
-        - Bump appVersion to 1.4.1
-      artifacthub.io/images: |
-        - name: utkuozdemir/nvidia_gpu_exporter
-          image: ghcr.io/utkuozdemir/nvidia_gpu_exporter:1.4.1
+      artifacthub.io/changes: '- Bump appVersion to 1.4.1
+
+        '
+      artifacthub.io/images: '[{"name":"nvidia_gpu_exporter","image":"ghcr.io/utkuozdemir/nvidia_gpu_exporter:1.4.1"}]'
       artifacthub.io/license: MIT
     apiVersion: v2
     appVersion: 1.4.1
-    created: "2025-10-06T23:45:18.190578145Z"
+    created: '2026-10-14T16:20:35.570769044-05:00'
     description: Nvidia GPU exporter for prometheus using nvidia-smi binary to gather
       metrics.
     digest: 93830f13c485f35278b901d2418fd505e95517d04300130750931fe52a51d900
@@ -328,7 +378,7 @@ entries:
     - prometheus
     maintainers:
     - email: utkuozdemir@gmail.com
-      name: Utku Özdemir
+      name: "Utku \xD6zdemir"
       url: https://utkuozdemir.org
     name: nvidia-gpu-exporter
     sources:
@@ -338,19 +388,19 @@ entries:
     - https://github.com/danchev/helm-charts/releases/download/nvidia-gpu-exporter-1.0.2/nvidia-gpu-exporter-1.0.2.tgz
     version: 1.0.2
   - annotations:
-      artifacthub.io/changes: |
-        - Bump appVersion to 1.3.2
+      artifacthub.io/changes: '- Bump appVersion to 1.3.2
+
         - Release 1.0.1 of the chart
-      artifacthub.io/images: |
-        - name: utkuozdemir/nvidia_gpu_exporter
-          image: docker.io/utkuozdemir/nvidia_gpu_exporter:1.3.2
+
+        '
+      artifacthub.io/images: "- name: utkuozdemir/nvidia_gpu_exporter\n  image:ghcr.io/utkuozdemir/nvidia_gpu_exporter:1.3.2\n"
       artifacthub.io/license: MIT
     apiVersion: v2
     appVersion: 1.3.2
-    created: "2025-07-18T23:56:13.769101914Z"
+    created: '2026-10-14T16:20:35.570401256-05:00'
     description: Nvidia GPU exporter for prometheus using nvidia-smi binary to gather
       metrics.
-    digest: cd984d231d7052b77a704d9a024b89c3e72f23741c2957453f21a7bcccf7185a
+    digest: 0a69a99514bf25bf820d3f53e2bf3c572bdacbac66d554ab2d320c955d379907
     home: https://github.com/utkuozdemir/nvidia_gpu_exporter
     icon: https://utkuozdemir.org/helm-charts/nvidia.png
     keywords:
@@ -362,28 +412,30 @@ entries:
     - prometheus
     maintainers:
     - email: utkuozdemir@gmail.com
-      name: Utku Özdemir
+      name: "Utku \xD6zdemir"
       url: https://utkuozdemir.org
     name: nvidia-gpu-exporter
     sources:
     - https://github.com/utkuozdemir/helm-charts
     type: application
     urls:
-    - https://danchev.github.io/helm-charts/charts/nvidia-gpu-exporter-1.0.1.tgz
+    - https://github.com/danchev/helm-charts/releases/download/nvidia-gpu-exporter-1.0.1/nvidia-gpu-exporter-1.0.1.tgz
     version: 1.0.1
   unsloth:
   - annotations:
-      artifacthub.io/changes: |
-        - Use the latest Studio image by default
+      artifacthub.io/changes: '- Use the latest Studio image by default
+
         - Migrate Studio password configuration and correct installation documentation
+
+        '
       artifacthub.io/images: '[{"name":"unsloth","image":"unsloth/unsloth:latest"}]'
       artifacthub.io/license: Apache-2.0
       category: AI Infra
     apiVersion: v2
     appVersion: latest
-    created: "2026-10-14T20:41:27.537792833Z"
-    description: A Helm chart for Unsloth Studio — GPU-accelerated LLM fine-tuning
-      and inference platform
+    created: '2026-10-14T16:20:35.572304167-05:00'
+    description: "A Helm chart for Unsloth Studio \u2014 GPU-accelerated LLM fine-tuning\
+      \ and inference platform"
     digest: 580ca4f1ef976cdaa07edeceb4d551d6463e4b998a413950d3024f5c75f9bce2
     home: https://unsloth.ai
     icon: https://raw.githubusercontent.com/unslothai/unsloth/main/images/unsloth%20logo%20white%20text.png
@@ -406,16 +458,17 @@ entries:
     - https://github.com/danchev/helm-charts/releases/download/unsloth-0.0.2/unsloth-0.0.2.tgz
     version: 0.0.2
   - annotations:
-      artifacthub.io/changes: |
-        - Initial release of Unsloth Helm chart
+      artifacthub.io/changes: '- Initial release of Unsloth Helm chart
+
+        '
       artifacthub.io/images: '[{"name":"unsloth","image":"unsloth/unsloth:latest"}]'
       artifacthub.io/license: Apache-2.0
       category: AI Infra
     apiVersion: v2
     appVersion: latest
-    created: "2026-04-24T14:39:07.75338019Z"
-    description: A Helm chart for Unsloth Studio — GPU-accelerated LLM fine-tuning
-      and inference platform
+    created: '2026-10-14T16:20:35.571900709-05:00'
+    description: "A Helm chart for Unsloth Studio \u2014 GPU-accelerated LLM fine-tuning\
+      \ and inference platform"
     digest: e8f8e54f6502922e0a825d3a2ef997966cdb25e564b47d5ae0206dc12bec491f
     home: https://unsloth.ai
     icon: https://raw.githubusercontent.com/unslothai/unsloth/main/images/unsloth%20logo%20white%20text.png
@@ -439,9 +492,21 @@ entries:
     version: 0.0.1
   vllm:
   - apiVersion: v2
-    created: "2025-09-02T16:27:32.916800742Z"
+    appVersion: 0.31.0
+    created: '2026-10-14T16:20:35.572829095-05:00'
     description: Chart vllm
-    digest: 3f6937fedbfdfaba866541e8bf71b4ad9f53a21cc4e4a34897cdf8fa2dc5fea4
+    digest: bda1d40caf604b19526dfe52dd3845162d6ff8bdcb4e0f8231bcddc192750878
+    maintainers:
+    - name: mfournioux
+    name: vllm
+    type: application
+    urls:
+    - https://github.com/danchev/helm-charts/releases/download/vllm-0.1.0/vllm-0.1.0.tgz
+    version: 0.1.0
+  - apiVersion: v2
+    created: '2026-10-14T16:20:35.572542966-05:00'
+    description: Chart vllm
+    digest: 06817aa1730149cd9095e2445e1f0cff4a143db6fe04a96b8c59e7195a036862
     maintainers:
     - name: mfournioux
     name: vllm
@@ -449,4 +514,4 @@ entries:
     urls:
     - https://github.com/danchev/helm-charts/releases/download/vllm-0.0.1/vllm-0.0.1.tgz
     version: 0.0.1
-generated: "2026-10-14T20:43:44.784267034Z"
+generated: '2026-10-14T16:20:35.556996091-05:00'
