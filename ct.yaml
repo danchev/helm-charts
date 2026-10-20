@@ -5,6 +5,7 @@ chart-dirs:
   - charts
 chart-repos:
   - danchev=https://danchev.github.io/helm-charts
+  - minio-operator=https://operator.min.io
 helm-extra-args: "--timeout 600s"
 validate-chart-schema: true
 validate-chart-values: true
