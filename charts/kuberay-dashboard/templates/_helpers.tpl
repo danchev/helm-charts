@@ -39,15 +39,21 @@ helm.sh/chart: {{ include "kuberay-dashboard.chart" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
+{{- if not (hasKey .Values.selectorLabels "app.kubernetes.io/managed-by") }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
 {{- end }}
 
 {{/*
 Selector labels
 */}}
 {{- define "kuberay-dashboard.selectorLabels" -}}
+{{- if .Values.selectorLabels }}
+{{ toYaml .Values.selectorLabels }}
+{{- else }}
 app.kubernetes.io/name: {{ include "kuberay-dashboard.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
 {{- end }}
 
 {{/*

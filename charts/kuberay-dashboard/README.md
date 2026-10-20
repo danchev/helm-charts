@@ -72,3 +72,20 @@ helm install kuberay-dashboard danchev/kuberay-dashboard --version 0.0.6 -f my-v
 | volumeMounts | list | `[]` |  |
 | volumes | list | `[]` |  |
 
+
+## History Server and deployment extensions
+
+Set `historyServer.url` to enable the dashboard's History Server integration.
+The History Server and collector sidecars are installed separately.
+`containerPort` defaults to 3000 independently of `service.port`.
+
+Use `command`, `args`, `extraEnv`, `extraContainers`, `extraObjects`, `volumes`
+and `volumeMounts` for optional runtime extensions. `extraObjects` accepts
+literal Kubernetes objects, not Helm template strings. Values do not contain
+any compatibility patches by default: supply version-specific workarounds in
+your deployment values. Customization of compiled assets requires reviewing
+those workarounds when the image changes.
+
+When migrating an existing Deployment, set `selectorLabels` to its exact
+immutable selector and `fullnameOverride` to its current name. Preserve the
+existing service name and port to avoid breaking routes.

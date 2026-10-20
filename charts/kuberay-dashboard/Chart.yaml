@@ -2,24 +2,30 @@ apiVersion: v2
 name: kuberay-dashboard
 description: A Helm chart for Ray Dashboard
 type: application
-version: 0.0.6
-appVersion: "v1.7.1"
-home: "https://github.com/ray-project/kuberay/tree/master/dashboard"
+version: 0.0.7
+appVersion: v1.7.1
+home: https://github.com/ray-project/kuberay/tree/master/dashboard
 keywords:
-  - ray
-  - dashboard
-  - kuberay
-  - kuberay-dashboard
+- ray
+- dashboard
+- kuberay
+- kuberay-dashboard
 sources:
-  - "https://github.com/danchev/helm-charts/tree/master/charts/kuberay-dashboard"
-icon: "https://raw.githubusercontent.com/ray-project/kuberay/master/dashboard/public/ray.png"
+- https://github.com/danchev/helm-charts/tree/master/charts/kuberay-dashboard
+icon: https://raw.githubusercontent.com/ray-project/kuberay/master/dashboard/public/ray.png
 maintainers:
-  - name: Dobri Danchev
-    email: 12420863+danchev@users.noreply.github.com
-    url: "https://danchev.github.io/helm-charts/"
+- name: Dobri Danchev
+  email: 12420863+danchev@users.noreply.github.com
+  url: https://danchev.github.io/helm-charts/
 annotations:
   category: AI Infra
   artifacthub.io/license: Apache-2.0
   artifacthub.io/images: '[{"name":"kuberay-dashboard","image":"quay.io/kuberay/dashboard:v1.7.1"}]'
-  artifacthub.io/changes: |
-    - Update appVersion to v1.7.1
+  artifacthub.io/changes: '- Add History Server configuration and optional deployment
+    extensions
+
+    - Preserve selectors when adopting an existing deployment
+
+    - Separate container and service ports
+
+    '

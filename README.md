@@ -8,9 +8,10 @@ This repository contains Helm charts for deploying various applications on Kuber
 
 - [aibrix](charts/aibrix) - A Helm chart for deploying AIBrix, cloud-native LLM inference infrastructure.
 - [nvidia-gpu-exporter](charts/nvidia-gpu-exporter) - A Helm chart for deploying the NVIDIA GPU Exporter, which exposes GPU metrics to Prometheus.
+- [kuberay-historyserver](charts/kuberay-historyserver) - A Helm chart for deploying the KubeRay History Server, with S3 storage and an optional live cluster proxy.
 - [kuberay-dashboard](charts/kuberay-dashboard) - A Helm chart for deploying the KubeRay Dashboard, a web UI for managing Ray clusters.
 - [vllm](charts/vllm) - A Helm chart for deploying vLLM, a high-throughput and memory-efficient inference engine for LLMs.
-- [unsloth](charts/unsloth) - GPU-accelerated LLM fine-tuning and inference with Unsloth Studio and Jupyter Lab.
+- [unsloth](charts/unsloth) - A Helm chart for deploying Unsloth Studio and Jupyter Lab for GPU-accelerated LLM fine-tuning and inference.
 
 ## Getting Started
 

@@ -1,0 +1,20 @@
+suite: optional Silo tenant
+templates:
+  - charts/minioTenant/templates/tenant.yaml
+tests:
+  - it: renders the pinned Silo image and existing config secret
+    set:
+      minioTenant.enabled: true
+      s3.existingSecret: credentials
+    asserts:
+      - isKind:
+          of: Tenant
+      - equal:
+          path: spec.image
+          value: docker.io/pgsty/silo:RELEASE.2026-10-18T00-00-00Z
+      - equal:
+          path: spec.configuration.name
+          value: ray-history-storage-config
+      - equal:
+          path: spec.buckets[0].name
+          value: ray-historyserver

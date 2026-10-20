@@ -1,0 +1,31 @@
+suite: history storage and live proxy
+templates:
+  - templates/deployment.yaml
+tests:
+  - it: uses existing S3 credentials without inline secrets
+    set:
+      s3.existingSecret: credentials
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].env[6].valueFrom.secretKeyRef.name
+          value: credentials
+      - notExists:
+          path: spec.template.spec.volumes
+  - it: enables live proxy with service account kubeconfig
+    set:
+      s3.existingSecret: credentials
+      liveClusters.enabled: true
+      liveClusters.useKubernetesProxy: true
+      selectorLabels:
+        app: existing-history
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: --use-kubernetes-proxy=true
+      - equal:
+          path: spec.template.spec.volumes[0].configMap.name
+          value: RELEASE-NAME-kubeconfig
+      - equal:
+          path: spec.selector.matchLabels
+          value:
+            app: existing-history

@@ -1,0 +1,36 @@
+apiVersion: v2
+name: kuberay-historyserver
+description: KubeRay History Server with S3 storage and optional live Kubernetes service
+  proxy
+type: application
+version: 0.0.1
+appVersion: nightly
+home: https://github.com/ray-project/kuberay/tree/master/historyserver
+keywords:
+- ray
+- kuberay
+- historyserver
+- s3
+sources:
+- https://github.com/ray-project/kuberay/tree/master/historyserver
+- https://github.com/danchev/helm-charts/tree/master/charts/kuberay-historyserver
+maintainers:
+- name: Dobri Danchev
+  email: 12420863+danchev@users.noreply.github.com
+  url: https://danchev.github.io/helm-charts/
+icon: https://raw.githubusercontent.com/ray-project/kuberay/master/dashboard/public/ray.png
+dependencies:
+- name: tenant
+  alias: minioTenant
+  version: 7.1.1
+  repository: https://operator.min.io
+  condition: minioTenant.enabled
+annotations:
+  category: AI Infra
+  artifacthub.io/license: Apache-2.0
+  artifacthub.io/changes: '- Initial History Server chart with external S3 credentials
+    and live cluster proxy
+
+    - Add optional pinned Silo Tenant dependency, disabled by default
+
+    '

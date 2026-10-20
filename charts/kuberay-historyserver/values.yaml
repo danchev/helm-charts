@@ -1,0 +1,62 @@
+replicaCount: 1
+fullnameOverride: ''
+image:
+  repository: quay.io/kuberay/historyserver
+  tag: nightly
+  pullPolicy: IfNotPresent
+imagePullSecrets: []
+selectorLabels: {}
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+securityContext: {}
+serviceAccount:
+  create: true
+  name: ''
+rbac:
+  create: true
+  name: ''
+service:
+  type: ClusterIP
+  port: 30080
+s3:
+  bucket: ray-historyserver
+  endpoint: ''
+  region: us-east-1
+  forcePathStyle: true
+  existingSecret: ''
+  accessKeyKey: access-key
+  secretKeyKey: secret-key
+liveClusters:
+  enabled: false
+  useKubernetesProxy: false
+cache:
+  maxMemory: 2Gi
+resources:
+  requests:
+    cpu: 500m
+    memory: 3Gi
+  limits:
+    memory: 4Gi
+extraArgs: []
+extraEnv: []
+nodeSelector: {}
+tolerations: []
+affinity: {}
+minioTenant:
+  enabled: false
+  tenant:
+    name: ray-history-storage
+    image:
+      repository: docker.io/pgsty/silo
+      tag: RELEASE.2026-10-18T00-00-00Z
+      pullPolicy: IfNotPresent
+    env:
+    - name: MINIO_UPDATE
+      value: 'off'
+    configSecret:
+      name: ray-history-storage-config
+      existingSecret: true
+    buckets:
+    - name: ray-historyserver
+      region: us-east-1

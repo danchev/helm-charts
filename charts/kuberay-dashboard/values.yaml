@@ -164,3 +164,14 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# Preserve immutable selectors when adopting an existing Deployment.
+selectorLabels: {}
+containerPort: 3000
+command: []
+args: []
+extraEnv: []
+extraContainers: []
+extraObjects: []
+historyServer:
+  url: ""

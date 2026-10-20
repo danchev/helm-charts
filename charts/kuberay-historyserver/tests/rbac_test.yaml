@@ -1,0 +1,27 @@
+suite: history proxy permissions
+templates:
+  - templates/rbac.yaml
+tests:
+  - it: excludes service proxy when disabled
+    asserts:
+      - lengthEqual:
+          path: rules
+          count: 1
+        documentIndex: 0
+  - it: grants only GET for the service proxy
+    set:
+      liveClusters.useKubernetesProxy: true
+    asserts:
+      - equal:
+          path: rules[1]
+          value:
+            apiGroups: [""]
+            resources: [services/proxy]
+            verbs: [get]
+        documentIndex: 0
+  - it: supports externally managed RBAC
+    set:
+      rbac.create: false
+    asserts:
+      - hasDocuments:
+          count: 0

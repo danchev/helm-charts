@@ -1,0 +1,37 @@
+suite: dashboard configuration
+templates:
+  - templates/deployment.yaml
+tests:
+  - it: separates container and service ports
+    set:
+      service.port: 80
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].ports[0].containerPort
+          value: 3000
+  - it: retains adoption selectors and history URL
+    set:
+      selectorLabels:
+        app: existing-dashboard
+      historyServer.url: http://localhost:8081
+      command: [node]
+      args: [server.js]
+      extraContainers:
+        - name: compat
+          image: example/compat:1
+    asserts:
+      - equal:
+          path: spec.selector.matchLabels
+          value:
+            app: existing-dashboard
+      - equal:
+          path: spec.template.metadata.labels.app
+          value: existing-dashboard
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: HISTORYSERVER_DOMAIN
+            value: http://localhost:8081
+      - equal:
+          path: spec.template.spec.containers[1].name
+          value: compat
