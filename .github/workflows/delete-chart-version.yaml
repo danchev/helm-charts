@@ -1,0 +1,67 @@
+name: Delete obsolete OCI chart version
+
+on:
+  workflow_dispatch:
+    inputs:
+      chart:
+        description: Chart package to clean up
+        required: true
+        type: choice
+        options:
+          - kuberay-dashboard
+          - kuberay-historyserver
+      version:
+        description: Exact obsolete version to delete
+        required: true
+        type: string
+      dry_run:
+        description: Preview without deleting
+        default: true
+        type: boolean
+
+permissions:
+  packages: write
+
+jobs:
+  delete-version:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Delete only the exact unshared version
+        env:
+          GH_TOKEN: ${{ github.token }}
+          OWNER: ${{ github.repository_owner }}
+          CHART: ${{ inputs.chart }}
+          VERSION: ${{ inputs.version }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "$CHART" in
+            kuberay-dashboard|kuberay-historyserver) ;;
+            *) echo "Unsupported chart"; exit 1 ;;
+          esac
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Expected an exact numeric chart version"
+            exit 1
+          fi
+          endpoint="users/$OWNER/packages/container/charts%2F$CHART/versions"
+          gh api --paginate --slurp "$endpoint" > "$RUNNER_TEMP/versions.json"
+          matches=$(jq --arg tag "$VERSION" '[.[][] | select(.metadata.container.tags | index($tag))]' "$RUNNER_TEMP/versions.json")
+          count=$(jq length <<< "$matches")
+          if [[ "$count" == 0 ]]; then
+            echo "$CHART:$VERSION is already absent"
+            exit 0
+          fi
+          if [[ "$count" != 1 ]] || [[ $(jq '.[0].metadata.container.tags | length' <<< "$matches") != 1 ]]; then
+            echo "Refusing ambiguous or shared-tag artifact deletion"
+            exit 1
+          fi
+          id=$(jq -r '.[0].id' <<< "$matches")
+          echo "Selected $CHART:$VERSION (package version $id)"
+          if [[ "$DRY_RUN" != false ]]; then
+            echo "Dry run: nothing deleted"
+            exit 0
+          fi
+          gh api --method DELETE "$endpoint/$id"
+          echo "Deleted $CHART:$VERSION"
