@@ -38,6 +38,7 @@ Studio release; `core` images do not include the Studio interface.
 | `resources.requests.nvidia.com/gpu` | `"1"` | Number of GPUs to request |
 | `persistence.work.size` | `5Gi` | Workspace volume size |
 | `persistence.models.size` | `50Gi` | HuggingFace cache volume size |
+| `persistence.studio.size` | `10Gi` | Unsloth Studio state and saved password volume size |
 | `persistence.work.storageClass` | `""` | Uses the cluster default storage class |
 | `persistence.models.storageClass` | `""` | Uses the cluster default storage class |
 | `secrets.JUPYTER_PASSWORD` | `""` | Auto-generated when empty |
