@@ -89,6 +89,8 @@ spec:
               mountPath: /workspace/work
             - name: models
               mountPath: /workspace/.cache/huggingface
+            - name: studio
+              mountPath: /opt/unsloth-studio
             {{- if .Values.persistence.notebooks.enabled }}
             - name: notebooks
               mountPath: /workspace/notebooks
@@ -100,6 +102,9 @@ spec:
         - name: models
           persistentVolumeClaim:
             claimName: {{ include "unsloth.fullname" . }}-models
+        - name: studio
+          persistentVolumeClaim:
+            claimName: {{ include "unsloth.fullname" . }}-studio
         {{- if .Values.persistence.notebooks.enabled }}
         - name: notebooks
           persistentVolumeClaim:

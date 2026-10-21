@@ -98,6 +98,16 @@ persistence:
     accessMode: ReadWriteOnce
     # -- Annotations added to the PVC.
     annotations: {}
+  # -- Studio state and password volume (/opt/unsloth-studio).
+  studio:
+    # -- Storage size.
+    size: 10Gi
+    # -- Storage class name. Leave empty to use the cluster default.
+    storageClass: ""
+    # -- Access mode.
+    accessMode: ReadWriteOnce
+    # -- Annotations added to the PVC.
+    annotations: {}
   # -- Optional notebooks volume (/workspace/notebooks).
   notebooks:
     # -- Enable a dedicated PVC for notebooks.

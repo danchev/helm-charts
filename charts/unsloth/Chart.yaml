@@ -2,7 +2,7 @@ apiVersion: v2
 name: unsloth
 description: A Helm chart for Unsloth Studio — GPU-accelerated LLM fine-tuning and inference platform
 type: application
-version: 0.0.2
+version: 0.0.3
 appVersion: "latest"
 home: "https://unsloth.ai"
 keywords:
@@ -26,3 +26,4 @@ annotations:
   artifacthub.io/changes: |
     - Use the latest Studio image by default
     - Migrate Studio password configuration and correct installation documentation
+    - Persist Studio state and saved password across pod replacements

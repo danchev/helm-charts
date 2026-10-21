@@ -37,6 +37,26 @@ spec:
   resources:
     requests:
       storage: {{ .Values.persistence.models.size }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "unsloth.fullname" . }}-studio
+  labels:
+    {{- include "unsloth.labels" . | nindent 4 }}
+  {{- with .Values.persistence.studio.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.studio.accessMode }}
+  {{- with .Values.persistence.studio.storageClass }}
+  storageClassName: {{ . }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.studio.size }}
 {{- if .Values.persistence.notebooks.enabled }}
 ---
 apiVersion: v1
