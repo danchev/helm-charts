@@ -142,35 +142,6 @@ entries:
   kuberay-dashboard:
   - annotations:
       artifacthub.io/changes: |
-        - Update appVersion to v1.7.1
-      artifacthub.io/images: '[{"name":"kuberay-dashboard","image":"quay.io/kuberay/dashboard:v1.7.1"}]'
-      artifacthub.io/license: Apache-2.0
-      category: AI Infra
-    apiVersion: v2
-    appVersion: v1.7.1
-    created: "2026-10-21T00:44:41.997904816Z"
-    description: A Helm chart for Ray Dashboard
-    digest: 7b4dbb2f2e48699693e414c3870890c0565ebb04e30584bc692e0fa4dc59808e
-    home: https://github.com/ray-project/kuberay/tree/master/dashboard
-    icon: https://raw.githubusercontent.com/ray-project/kuberay/master/dashboard/public/ray.png
-    keywords:
-    - ray
-    - dashboard
-    - kuberay
-    - kuberay-dashboard
-    maintainers:
-    - email: 12420863+danchev@users.noreply.github.com
-      name: Dobri Danchev
-      url: https://danchev.github.io/helm-charts/
-    name: kuberay-dashboard
-    sources:
-    - https://github.com/danchev/helm-charts/tree/master/charts/kuberay-dashboard
-    type: application
-    urls:
-    - https://github.com/danchev/helm-charts/releases/download/kuberay-dashboard-0.1.0/kuberay-dashboard-0.1.0.tgz
-    version: 0.1.0
-  - annotations:
-      artifacthub.io/changes: |
         - Add History Server configuration and optional deployment extensions
         - Preserve selectors when adopting an existing deployment
         - Separate container and service ports
@@ -374,36 +345,6 @@ entries:
     - https://github.com/danchev/helm-charts/releases/download/kuberay-dashboard-0.0.1/kuberay-dashboard-0.0.1.tgz
     version: 0.0.1
   kuberay-historyserver:
-  - apiVersion: v2
-    appVersion: nightly
-    created: "2026-10-21T00:44:42.258122113Z"
-    dependencies:
-    - alias: minioTenant
-      condition: minioTenant.enabled
-      name: tenant
-      repository: https://operator.min.io
-      version: 7.1.1
-    description: KubeRay History Server with S3 storage and optional live Kubernetes
-      service proxy
-    digest: 3c79d7f991c41a07ca0d9b724b6dbeed7d69ab7b46999792015d6d4059b99fa5
-    home: https://github.com/ray-project/kuberay/tree/master/historyserver
-    icon: https://raw.githubusercontent.com/ray-project/kuberay/master/dashboard/public/ray.png
-    keywords:
-    - ray
-    - dashboard
-    - kuberay
-    - kuberay-dashboard
-    maintainers:
-    - email: 12420863+danchev@users.noreply.github.com
-      name: Dobri Danchev
-      url: https://danchev.github.io/helm-charts/
-    name: kuberay-historyserver
-    sources:
-    - https://github.com/ray-project/kuberay/tree/master/historyserver
-    type: application
-    urls:
-    - https://github.com/danchev/helm-charts/releases/download/kuberay-historyserver-0.1.0/kuberay-historyserver-0.1.0.tgz
-    version: 0.1.0
   - annotations:
       artifacthub.io/changes: |
         - Initial History Server chart with external S3 credentials and live cluster proxy
@@ -662,4 +603,4 @@ entries:
     urls:
     - https://github.com/danchev/helm-charts/releases/download/vllm-0.0.1/vllm-0.0.1.tgz
     version: 0.0.1
-generated: "2026-10-21T01:02:45.630422685Z"
+generated: "2026-10-21T01:03:46.026061+00:00"
