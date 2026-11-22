@@ -1,8 +1,8 @@
 # nvidia-gpu-exporter
 
-![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.15.1](https://img.shields.io/badge/AppVersion-1.15.1-informational?style=flat-square)
+![Version: 2.0.0](https://img.shields.io/badge/Version-2.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.0.0](https://img.shields.io/badge/AppVersion-2.0.0-informational?style=flat-square)
 
-Nvidia GPU exporter for prometheus using nvidia-smi binary to gather metrics.
+Prometheus exporter for NVIDIA GPUs using NVML or nvidia-smi.
 
 **Homepage:** <https://github.com/utkuozdemir/nvidia_gpu_exporter>
 
@@ -13,20 +13,47 @@ $ helm repo add danchev https://danchev.github.io/helm-charts
 $ helm install my-release danchev/nvidia-gpu-exporter
 ```
 
-## Upgrading the image
+## Upgrading to chart 2.0.0
 
-Chart 1.1.0 runs NVIDIA GPU Exporter 1.15.1. Its container image is now
-shell-less and defaults to UID 65534. This chart explicitly uses UID 0 for its
-existing privileged host-device and driver mounts. Review custom security
-contexts and host driver paths before upgrading GPU nodes. Metrics with
-millisecond units now use seconds; review affected Prometheus queries against
-the [upstream release notes](https://github.com/utkuozdemir/nvidia_gpu_exporter/releases).
+This release runs NVIDIA GPU Exporter 2.0.0 and explicitly defaults to the NVML
+backend. Set `collectBackend: exec` to retain nvidia-smi collection. NVML exports
+`nvidia_smi_nvml_return_code` instead of `nvidia_smi_command_exit_code`;
+shared GPU metrics retain their names and labels.
+
+The default node selector requires `nvidia.com/gpu.present: "true"`. Ensure GPU
+nodes carry this label; override `nodeSelector` if your cluster uses another
+label. NVML exits at startup if the driver library is unavailable.
+
+Default host library paths assume Debian/Ubuntu x86_64 GPU nodes. For SUSE/RHEL,
+set the `volumes` host paths to `/usr/lib64/libnvidia-ml.so` and
+`/usr/lib64/libnvidia-ml.so.1`, while retaining the container `volumeMounts` paths
+under `/usr/lib/x86_64-linux-gnu/`. Host paths and container paths need not match.
+Override the complete lists when changing `volumes` or `volumeMounts`.
+
+The chart retains its existing privileged UID 0 security context for host-device
+access. The exporter image is shell-less. Custom nvidia-smi commands and fields
+outside the NVML catalog require `collectBackend: exec`.
+
+Use `extraArgs` for additional exporter flags and `extraEnv` for container
+variables, for example:
+
+```yaml
+collectBackend: nvml
+extraArgs:
+  - --collect.pcie-throughput
+extraEnv:
+  - name: LD_LIBRARY_PATH
+    value: /usr/lib/x86_64-linux-gnu
+```
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | object | `{}` | Affinity for the pod assignment |
+| collectBackend | string | `"nvml"` | Collection backend: nvml (direct driver access) or exec (nvidia-smi). |
+| extraArgs | list | `[]` | Additional exporter command-line arguments. |
+| extraEnv | list | `[]` | Additional container environment variables, including valueFrom references. |
 | fullnameOverride | string | `""` | String to fully override fullname template with a string |
 | hostNetwork | bool | `false` |  |
 | hostPort.enabled | bool | `false` | Enable hostPort |
@@ -43,12 +70,12 @@ the [upstream release notes](https://github.com/utkuozdemir/nvidia_gpu_exporter/
 | log.format | string | `"logfmt"` | Log format to be used by the exporter |
 | log.level | string | `"info"` | Log level to be used by the exporter |
 | nameOverride | string | `""` | String to partially override fullname template with a string (will prepend the release name) |
-| nodeSelector | object | `{}` | The node selector for the deployment |
+| nodeSelector | object | `{"nvidia.com/gpu.present":"true"}` | The node selector for the deployment |
 | nvidiaSmiCommand | string | `"nvidia-smi"` | The command to run to get `nvidia-smi` compatible output. Can be custom path and/or args. |
 | podAnnotations | object | `{}` | Annotations for the pods |
 | podSecurityContext | object | `{}` | Security context for the pods |
 | port | int | `9835` | Port for the exporter to listen to |
-| queryFieldNames | list | `["AUTO"]` | `nvidia-smi` fields to be queried by the exporter |
+| queryFieldNames | list | `["AUTO"]` | Query fields to be collected by the exporter |
 | resources | object | `{}` | The resource requests and limits of the container |
 | securityContext | object | `{"privileged":true,"runAsUser":0}` | Security context for the container. Privileged is required for the collector to work properly. |
 | service.enabled | bool | `true` | Enables the Service |

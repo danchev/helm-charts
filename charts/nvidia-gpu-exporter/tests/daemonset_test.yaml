@@ -1,0 +1,41 @@
+suite: exporter v2 deployment
+templates:
+  - templates/daemonset.yaml
+tests:
+  - it: defaults to NVML on GPU nodes with the Debian library mount
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: ghcr.io/utkuozdemir/nvidia_gpu_exporter:2.0.0
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: --collect.backend=nvml
+      - equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            nvidia.com/gpu.present: "true"
+      - contains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: libnvidia-ml-so-1
+            mountPath: /usr/lib/x86_64-linux-gnu/libnvidia-ml.so.1
+  - it: supports the exec backend and additional arguments and environment
+    set:
+      collectBackend: exec
+      extraArgs:
+        - --collect.timeout=5s
+      extraEnv:
+        - name: LD_LIBRARY_PATH
+          value: /usr/lib64
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: --collect.backend=exec
+      - contains:
+          path: spec.template.spec.containers[0].args
+          content: --collect.timeout=5s
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: LD_LIBRARY_PATH
+            value: /usr/lib64
