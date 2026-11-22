@@ -30,7 +30,12 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.extraEnv }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           args:
+            - {{ printf "--collect.backend=%s" .Values.collectBackend | quote }}
             - --web.listen-address
             - :{{ .Values.port }}
             - --web.telemetry-path
@@ -43,6 +48,9 @@ spec:
             - {{ .Values.log.level }}
             - --log.format
             - {{ .Values.log.format }}
+            {{- with .Values.extraArgs }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.port }}

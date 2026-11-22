@@ -84,7 +84,8 @@ resources: {}
   #   memory: 128Mi
 
 # -- The node selector for the deployment
-nodeSelector: {}
+nodeSelector:
+  nvidia.com/gpu.present: "true"
 
 # -- Tolerations for the pod assignment
 tolerations: []
@@ -107,7 +108,16 @@ log:
   # -- Log format to be used by the exporter
   format: logfmt
 
-# -- `nvidia-smi` fields to be queried by the exporter
+# -- Collection backend: nvml (direct driver access) or exec (nvidia-smi).
+collectBackend: nvml
+
+# -- Additional exporter command-line arguments.
+extraArgs: []
+
+# -- Additional container environment variables, including valueFrom references.
+extraEnv: []
+
+# -- Query fields to be collected by the exporter
 queryFieldNames:
   - AUTO
 
